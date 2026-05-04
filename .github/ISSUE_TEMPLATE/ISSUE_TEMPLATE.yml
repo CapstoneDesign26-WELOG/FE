@@ -1,0 +1,24 @@
+name: "✨ Feature"
+description: "새로운 기능 추가"
+title: "feat: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        작성 예시 : "feat: 로그인 기능 구현"
+  - type: textarea
+    id: feat-description
+    attributes:
+      label: 🛠 Issue
+      description: 어떠한 기능을 추가하시는 건지 작성해주세요.
+      placeholder: 설명을 작성해주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: feat-list
+    attributes:
+      label: 📝 To-do
+      description: 작업에 필요한 목록을 작성해주세요.
+      placeholder: 목록을 작성해주세요.
+    validations:
+      required: true
