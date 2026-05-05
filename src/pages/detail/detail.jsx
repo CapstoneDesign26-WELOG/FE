@@ -1,5 +1,5 @@
 const detail = () => {
-  return <div>detail</div>;
+  return <div>글 상세 페이지</div>;
 };
 
 export default detail;

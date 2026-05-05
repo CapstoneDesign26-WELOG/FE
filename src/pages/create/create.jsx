@@ -1,5 +1,5 @@
 const create = () => {
-  return <div>create</div>;
+  return <div>글 작성 페이지</div>;
 };
 
 export default create;
