@@ -42,6 +42,9 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
 
+      // JSX 프로젝트에서는 PropTypes 강제하지 않음
+      'react/prop-types': 'off',
+
       // 미사용 변수 허용 패턴
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
 
