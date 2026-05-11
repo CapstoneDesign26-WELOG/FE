@@ -1,0 +1,14 @@
+export { default as Chat } from './Chat';
+export { default as ChatFilled } from './ChatFilled';
+export { default as ChatLined } from './ChatLined';
+export { default as Heart } from './Heart';
+export { default as HomeFilled } from './HomeFilled';
+export { default as HomeLined } from './HomeLined';
+export { default as Location } from './Location';
+export { default as Logo } from './Logo';
+export { default as LogoGray } from './LogoGray';
+export { default as MyFilled } from './MyFilled';
+export { default as MyLined } from './MyLined';
+export { default as Notifications } from './Notifications';
+export { default as Plus } from './Plus';
+export { default as Reply } from './Reply';
