@@ -6,30 +6,36 @@ import Login from '@/pages/login/login';
 import MyPage from '@/pages/mypage/my-page';
 import Personal from '@/pages/public/public';
 import { ROUTES } from './routes-config';
+import Layout from './layout';
 
 export const router = createBrowserRouter([
   {
-    path: ROUTES.HOME,
-    element: <Home />,
-  },
-  {
-    path: ROUTES.LOGIN,
-    element: <Login />,
-  },
-  {
-    path: ROUTES.CREATE,
-    element: <Create />,
-  },
-  {
-    path: ROUTES.DETAIL(),
-    element: <Detail />,
-  },
-  {
-    path: ROUTES.PUBLIC,
-    element: <Personal />,
-  },
-  {
-    path: ROUTES.MYPAGE,
-    element: <MyPage />,
+    element: <Layout />,
+    children: [
+      {
+        path: ROUTES.HOME,
+        element: <Home />,
+      },
+      {
+        path: ROUTES.LOGIN,
+        element: <Login />,
+      },
+      {
+        path: ROUTES.CREATE,
+        element: <Create />,
+      },
+      {
+        path: ROUTES.DETAIL(),
+        element: <Detail />,
+      },
+      {
+        path: ROUTES.PUBLIC,
+        element: <Personal />,
+      },
+      {
+        path: ROUTES.MYPAGE,
+        element: <MyPage />,
+      },
+    ],
   },
 ]);
