@@ -1,11 +1,11 @@
-import { createBrowserRouter } from "react-router-dom";
-import Create from "@/pages/create/create";
-import Detail from "@/pages/detail/detail";
-import Home from "@/pages/home/home";
-import Login from "@/pages/login/login";
-import MyPage from "@/pages/mypage/my-page";
-import Personal from "@/pages/personal/personal";
-import { ROUTES } from "./routes-config";
+import { createBrowserRouter } from 'react-router-dom';
+import Create from '@/pages/create/create';
+import Detail from '@/pages/detail/detail';
+import Home from '@/pages/home/home';
+import Login from '@/pages/login/login';
+import MyPage from '@/pages/mypage/my-page';
+import Personal from '@/pages/personal/personal';
+import { ROUTES } from './routes-config';
 
 export const router = createBrowserRouter([
   {
