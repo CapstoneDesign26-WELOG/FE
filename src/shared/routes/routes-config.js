@@ -1,7 +1,7 @@
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
-  PERSONAL: '/personal',
+  PUBLIC: '/public',
   CREATE: '/create',
   DETAIL: (id = ':postId') => `/detail/${id}`,
   MYPAGE: '/mypage',

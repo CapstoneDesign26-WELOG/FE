@@ -4,7 +4,7 @@ import Detail from '@/pages/detail/detail';
 import Home from '@/pages/home/home';
 import Login from '@/pages/login/login';
 import MyPage from '@/pages/mypage/my-page';
-import Personal from '@/pages/personal/personal';
+import Personal from '@/pages/public/public';
 import { ROUTES } from './routes-config';
 
 export const router = createBrowserRouter([
@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
     element: <Detail />,
   },
   {
-    path: ROUTES.PERSONAL,
+    path: ROUTES.PUBLIC,
     element: <Personal />,
   },
   {
