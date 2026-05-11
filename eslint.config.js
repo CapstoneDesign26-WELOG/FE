@@ -1,18 +1,18 @@
-import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
-import pluginReact from "eslint-plugin-react";
-import globals from "globals";
+import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import pluginReact from 'eslint-plugin-react';
+import globals from 'globals';
 
 export default defineConfig([
   {
-    ignores: ["dist"],
+    ignores: ['dist'],
   },
 
   {
-    files: ["**/*.{js,mjs,cjs,jsx}"],
+    files: ['**/*.{js,mjs,cjs,jsx}'],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -30,39 +30,39 @@ export default defineConfig([
   {
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
 
     rules: {
       // React 17+ JSX Transform 대응
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off",
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
 
       // var 사용 금지
-      "no-var": "error",
+      'no-var': 'error',
 
       // const 사용 권장
-      "prefer-const": "error",
+      'prefer-const': 'error',
 
       // 템플릿 리터럴 권장
-      "prefer-template": "warn",
+      'prefer-template': 'warn',
 
       // 주석 대문자 시작
-      "capitalized-comments": [
-        "warn",
-        "always",
+      'capitalized-comments': [
+        'warn',
+        'always',
         {
           ignoreConsecutiveComments: true,
-          ignorePattern: "^[A-Z_]+$",
+          ignorePattern: '^[A-Z_]+$',
         },
       ],
 
       // 화살표 함수 권장
-      "prefer-arrow-callback": "warn",
+      'prefer-arrow-callback': 'warn',
 
       // 불필요한 중괄호 제거
-      "arrow-body-style": ["warn", "as-needed"],
+      'arrow-body-style': ['warn', 'as-needed'],
     },
   },
 ]);
