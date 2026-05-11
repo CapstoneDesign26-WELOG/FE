@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginReact from 'eslint-plugin-react';
 import globals from 'globals';
 
@@ -26,7 +27,7 @@ export default defineConfig([
   // React 권장 규칙
   pluginReact.configs.flat.recommended,
 
-  // 마지막에 사용자 규칙으로 덮어쓰기
+  // 사용자 커스텀 규칙
   {
     settings: {
       react: {
@@ -45,10 +46,10 @@ export default defineConfig([
       // const 사용 권장
       'prefer-const': 'error',
 
-      // 템플릿 리터럴 권장
+      // 문자열 결합 시 템플릿 리터럴 권장
       'prefer-template': 'warn',
 
-      // 주석 대문자 시작
+      // 주석은 대문자로 시작하도록 권장
       'capitalized-comments': [
         'warn',
         'always',
@@ -58,11 +59,14 @@ export default defineConfig([
         },
       ],
 
-      // 화살표 함수 권장
+      // 콜백 함수는 화살표 함수 사용 권장
       'prefer-arrow-callback': 'warn',
 
       // 불필요한 중괄호 제거
       'arrow-body-style': ['warn', 'as-needed'],
     },
   },
+
+  // Prettier와 충돌하는 ESLint 규칙 비활성화
+  eslintConfigPrettier,
 ]);
