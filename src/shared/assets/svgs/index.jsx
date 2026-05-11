@@ -1,3 +1,4 @@
+export { default as ArrowLeft } from './ArrowLeft';
 export { default as ChatFilled } from './ChatFilled';
 export { default as ChatLined } from './ChatLined';
 export { default as Chat } from './Chat';
