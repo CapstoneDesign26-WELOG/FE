@@ -1,6 +1,6 @@
-name: "✨ Feature"
-description: "새로운 기능 추가"
-title: "feat: "
+name: '✨ Feature'
+description: '새로운 기능 추가'
+title: 'feat: '
 body:
   - type: markdown
     attributes:
