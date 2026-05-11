@@ -1,67 +1,57 @@
-import js from "@eslint/js";
-import { defineConfig, globalIgnores } from "eslint/config";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
+import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginReact from 'eslint-plugin-react';
-import globals from "globals";
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
 
 export default defineConfig([
+  // 무시할 폴더
   {
-    ignores: ['dist'],
+    ignores: ['dist', 'src/shared/assets/svgs'],
   },
+
+  // 기본 설정
   {
-    files: ["**/*.{js,jsx}"],
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
       parserOptions: {
-        ecmaVersion: "latest",
-        ecmaFeatures: { jsx: true },
-        sourceType: "module",
         ecmaFeatures: {
           jsx: true,
         },
       },
       globals: globals.browser,
     },
-    extends: [js.configs.recommended],
-  },
-
-  // React 권장 규칙
-  pluginReact.configs.flat.recommended,
-
-  // 사용자 커스텀 규칙
-  {
     settings: {
       react: {
         version: 'detect',
       },
     },
-
+    extends: [
+      js.configs.recommended,
+      pluginReact.configs.flat.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+      eslintConfigPrettier,
+    ],
     rules: {
-      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
-    },
-  },
-      // React 17+ JSX Transform 대응
+      // React 17+ JSX Transform
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
 
-      // var 사용 금지
+      // 미사용 변수 허용 패턴
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+
+      // 코드 스타일
       'no-var': 'error',
-
-      // const 사용 권장
       'prefer-const': 'error',
-
-      // 문자열 결합 시 템플릿 리터럴 권장
       'prefer-template': 'warn',
+      'prefer-arrow-callback': 'warn',
+      'arrow-body-style': ['warn', 'as-needed'],
 
-      // 주석은 대문자로 시작하도록 권장
       'capitalized-comments': [
         'warn',
         'always',
@@ -70,15 +60,6 @@ export default defineConfig([
           ignorePattern: '^[A-Z_]+$',
         },
       ],
-
-      // 콜백 함수는 화살표 함수 사용 권장
-      'prefer-arrow-callback': 'warn',
-
-      // 불필요한 중괄호 제거
-      'arrow-body-style': ['warn', 'as-needed'],
     },
   },
-
-  // Prettier와 충돌하는 ESLint 규칙 비활성화
-  eslintConfigPrettier,
 ]);
