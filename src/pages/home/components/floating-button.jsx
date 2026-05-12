@@ -1,6 +1,5 @@
 import { Plus } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const FloatingButton = () => {
