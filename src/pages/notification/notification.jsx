@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Header from '@/shared/components/header/Header';
+import Header from '@/shared/components/header/header';
 
 const DUMMY_NOTIFICATIONS = [
   {
