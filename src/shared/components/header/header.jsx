@@ -25,7 +25,12 @@ const Header = ({
 
     if (variant === 'back' || variant === 'write') {
       return (
-        <button type="button" aria-label="뒤로가기" onClick={handleBackClick}>
+        <button
+          type="button"
+          aria-label="뒤로가기"
+          onClick={handleBackClick}
+          className="cursor-pointer"
+        >
           <ArrowLeft width={24} className="mr-[0.8rem]" />
         </button>
       );
