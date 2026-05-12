@@ -3,7 +3,7 @@ const CommentInput = ({ value, onChange, onSubmit }) => {
 
   return (
     <form
-      className="h-[5.6rem] w-full border-t border-gray-100 bg-white px-[1.6rem] py-[0.8rem]"
+      className="sticky bottom-0 z-10 h-[5.6rem] w-full border-t border-gray-100 bg-white px-[1.6rem] py-[0.8rem]"
       onSubmit={onSubmit}
     >
       <div className="flex h-full items-center gap-[0.8rem]">
