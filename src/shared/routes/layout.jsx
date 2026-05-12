@@ -2,7 +2,12 @@ import { Outlet, matchPath, useLocation } from 'react-router-dom';
 import BottomNavigation from '../components/bottom-navigation/bottom-navigation';
 import { ROUTES } from './routes-config';
 
-const HIDDEN_NAV_ROUTES = [ROUTES.NOTIFICATION, ROUTES.CREATE];
+const HIDDEN_NAV_ROUTES = [
+  ROUTES.NOTIFICATION,
+  ROUTES.CREATE,
+  ROUTES.MY_POSTS,
+  ROUTES.MY_COMMENTS,
+];
 
 const Layout = () => {
   const { pathname } = useLocation();

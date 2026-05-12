@@ -4,6 +4,8 @@ import Detail from '@/pages/detail/detail';
 import Home from '@/pages/home/home';
 import Login from '@/pages/login/login';
 import MyPage from '@/pages/mypage/my-page';
+import MyPosts from '@/pages/mypage/my-posts';
+import MyComments from '@/pages/mypage/my-comments';
 import Personal from '@/pages/public/public';
 import { ROUTES } from './routes-config';
 import Layout from './layout';
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.MYPAGE,
         element: <MyPage />,
+      },
+      {
+        path: ROUTES.MY_POSTS,
+        element: <MyPosts />,
+      },
+      {
+        path: ROUTES.MY_COMMENTS,
+        element: <MyComments />,
       },
       {
         path: ROUTES.NOTIFICATION,
