@@ -5,6 +5,7 @@ import EmptyState from './components/empty-state';
 import PostList from './components/post-list';
 
 const Home = () => {
+  // TODO: 목데이터 삭제 후 api 연결
   const posts = MOCK_POSTS;
 
   return (
