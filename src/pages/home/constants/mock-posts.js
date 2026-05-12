@@ -1,7 +1,7 @@
 export const MOCK_POSTS = [
   {
     id: 1,
-    title: '1교시 드랍할까? 통학 3시간 너무 힘들어ㅜㅜ',
+    title: '1교시 드랍할까요? 통학 40분인데 너무 힘들어요',
     commentCount: 5,
     createdAt: '3분 전',
   },
