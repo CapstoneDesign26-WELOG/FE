@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Logo, Notifications } from '@/shared/assets/svgs';
+import { ROUTES } from '@/shared/routes/routes-config';
 
 const Header = ({
   title,
@@ -18,6 +19,15 @@ const Header = ({
     }
 
     navigate(-1);
+  };
+
+  const handleNotificationClick = () => {
+    if (onNotificationClick) {
+      onNotificationClick();
+      return;
+    }
+
+    navigate(ROUTES.NOTIFICATION);
   };
 
   const renderLeft = () => {
@@ -42,7 +52,12 @@ const Header = ({
   const renderRight = () => {
     if (variant === 'logo') {
       return (
-        <button type="button" aria-label="알림" onClick={onNotificationClick}>
+        <button
+          type="button"
+          aria-label="알림"
+          onClick={handleNotificationClick}
+          className="cursor-pointer"
+        >
           <Notifications width={30} />
         </button>
       );
