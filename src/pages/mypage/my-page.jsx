@@ -10,7 +10,7 @@ const MyPage = () => {
       <Header title="마이페이지" />
 
       <main className="flex flex-1 flex-col px-[1.6rem] pt-[2.6rem] pb-[1.6rem]">
-        <section className="rounded-[1.2rem] bg-[#f1f1f3] px-[1.6rem] py-[2rem]">
+        <section className="rounded-[1.2rem] bg-gray-200 px-[1.6rem] py-[2rem]">
           <div className="flex flex-col items-center">
             <img src="/svgs/profile.svg" alt="" className="h-[4rem] w-[4rem]" />
 

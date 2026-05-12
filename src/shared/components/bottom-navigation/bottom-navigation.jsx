@@ -18,7 +18,7 @@ const BottomNavigation = () => {
           <button
             key={label}
             type="button"
-            className="flex w-[5.6rem] flex-col items-center justify-center gap-[0.4rem] cursor-pointer "
+            className="flex w-[6rem] flex-col items-center justify-center gap-[0.4rem] cursor-pointer "
             onClick={() => navigate(path)}
           >
             <IconComponent width={24} height={24} />
