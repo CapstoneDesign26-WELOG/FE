@@ -21,13 +21,13 @@ const CommentInput = ({ value, onChange, onSubmit }) => {
           aria-label="댓글 전송"
           className={`flex h-[4rem] w-[4rem] shrink-0 items-center justify-center rounded-full ${
             isTyping
-              ? 'bg-[#6FCF97] cursor-pointer'
-              : 'bg-gray-300 cursor-default'
+              ? 'cursor-pointer bg-[#6FCF97]'
+              : 'cursor-default bg-gray-300'
           }`}
         >
           <svg
-            width="20"
-            height="29"
+            width="16"
+            height="16"
             viewBox="0 0 14 14"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
