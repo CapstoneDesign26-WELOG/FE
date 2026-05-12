@@ -7,6 +7,7 @@ import MyPage from '@/pages/mypage/my-page';
 import Personal from '@/pages/public/public';
 import { ROUTES } from './routes-config';
 import Layout from './layout';
+import Notification from '@/pages/notification/notification';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.MYPAGE,
         element: <MyPage />,
+      },
+      {
+        path: ROUTES.NOTIFICATION,
+        element: <Notification />,
       },
     ],
   },

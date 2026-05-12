@@ -5,4 +5,5 @@ export const ROUTES = {
   CREATE: '/create',
   DETAIL: (id = ':postId') => `/detail/${id}`,
   MYPAGE: '/mypage',
+  NOTIFICATION: '/notification',
 };
