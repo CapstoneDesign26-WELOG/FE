@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
-const CommentItem = ({ comment, isReply = false }) => {
+const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
-  const [replies, setReplies] = useState(comment.replies ?? []);
 
   const likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount;
   const isReplyTyping = replyValue.trim().length > 0;
@@ -20,21 +19,15 @@ const CommentItem = ({ comment, isReply = false }) => {
 
     if (trimmedValue.length === 0) return;
 
-    const newReply = {
-      id: Date.now(),
-      author: '익명',
-      content: trimmedValue,
-      likeCount: 0,
-      replies: [],
-    };
-
-    setReplies((prevReplies) => [...prevReplies, newReply]);
+    onReplySubmit(comment.id, trimmedValue);
     setReplyValue('');
     setIsReplying(false);
   };
 
   return (
-    <li className={`flex flex-col gap-[0.8rem] ${isReply ? 'ml-[2rem]' : ''}`}>
+    <li
+      className={`flex flex-col gap-[0.8rem] ${isReply ? 'ml-[1.2rem]' : ''}`}
+    >
       <div className="rounded-[1.2rem] bg-gray-100 px-[1.2rem] py-[1rem]">
         <div className="flex items-center gap-[0.8rem]">
           <p className="cap_14_m text-gray-800">{comment.author}</p>
@@ -107,10 +100,15 @@ const CommentItem = ({ comment, isReply = false }) => {
         </form>
       )}
 
-      {replies.length > 0 && (
+      {comment.replies?.length > 0 && (
         <ul className="flex flex-col gap-[1.2rem]">
-          {replies.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} isReply />
+          {comment.replies.map((reply) => (
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              isReply
+              onReplySubmit={onReplySubmit}
+            />
           ))}
         </ul>
       )}
