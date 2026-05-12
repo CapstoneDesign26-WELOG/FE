@@ -60,9 +60,9 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
             className="cap_14_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
           >
             <img
-              src="/svgs/comment.svg"
+              src="/svgs/chat.svg"
               alt=""
-              className="h-[1.33rem] w-[1.33rem]"
+              className="h-[1.6rem] w-[1.6rem]"
             />
             <span>답글</span>
           </button>
