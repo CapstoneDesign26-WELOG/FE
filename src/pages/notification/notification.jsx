@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Header from '@/shared/components/header/header';
+import { Reply } from '@/shared/assets/svgs';
 
 const DUMMY_NOTIFICATIONS = [
   {
@@ -32,16 +33,19 @@ const Notification = () => {
         {DUMMY_NOTIFICATIONS.map((item) => (
           <li
             key={item.id}
-            className="flex flex-col gap-[0.8rem] border-b border-gray-300 px-[2rem] py-[2rem]"
+            className="flex gap-[0.8rem] border-b border-gray-300 p-[1.6rem]"
           >
-            <div className="flex items-center gap-[0.8rem]">
-              <span className="text-gray-500">💬</span>
-              <span className="body_16_b text-gray-black">{item.type}</span>
+            <div className="flex justify-center items-center w-[1.6rem] h-[1.6rem] bg-gray-300 rounded-full">
+              <Reply width={9.6} />
             </div>
-            <p className="cap_14_m text-gray-600">{item.postTitle}</p>
-            <div className="rounded-[0.8rem] bg-gray-200 px-[1.6rem] py-[1.2rem]">
-              <p className="cap_14_m text-gray-600">{item.comment}</p>
-            </div>
+
+            <section className="flex flex-col w-full gap-[0.4rem]">
+              <p className="body_16_b text-gray-black">{item.type}</p>
+              <p className="cap_14_m text-gray-600">{item.postTitle}</p>
+              <div className="w-full rounded-[8px] bg-gray-200 px-[1.2rem] py-[0.5rem]">
+                <p className="cap_12_m text-gray-600">{item.comment}</p>
+              </div>
+            </section>
           </li>
         ))}
       </ul>
