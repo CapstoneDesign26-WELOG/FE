@@ -1,5 +1,6 @@
 import { Chat, Heart, HeartFilled } from '@/shared/assets/svgs';
 import { useState } from 'react';
+import InputBar from '@/shared/components/input-bar/input-bar';
 
 const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -7,15 +8,12 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
   const [replyValue, setReplyValue] = useState('');
 
   const likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount;
-  const isReplyTyping = replyValue.trim().length > 0;
 
   const handleLikeClick = () => {
     setIsLiked((prev) => !prev);
   };
 
-  const handleReplySubmit = (event) => {
-    event.preventDefault();
-
+  const handleReplySubmit = () => {
     const trimmedValue = replyValue.trim();
 
     if (trimmedValue.length === 0) return;
@@ -63,35 +61,15 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
       </div>
 
       {isReplying && (
-        <form
-          className="flex items-center gap-[0.8rem] px-[0.4rem]"
-          onSubmit={handleReplySubmit}
-        >
-          <input
-            type="text"
+        <div>
+          <InputBar
             value={replyValue}
-            onChange={(event) => setReplyValue(event.target.value)}
+            onChange={setReplyValue}
+            onSubmit={handleReplySubmit}
             placeholder="답글을 입력하세요..."
-            className="cap_14_m h-[3.6rem] flex-1 rounded-full border border-gray-200 bg-white px-[1.4rem] text-gray-900 outline-none placeholder:text-gray-400"
+            variant="reply"
           />
-
-          <button
-            type="submit"
-            disabled={!isReplyTyping}
-            aria-label="답글 전송"
-            className={`flex h-[2.8rem] w-[2.8rem] shrink-0 items-center justify-center rounded-full ${
-              isReplyTyping
-                ? 'cursor-pointer bg-[#00B890]'
-                : 'cursor-default bg-[#93959D]'
-            }`}
-          >
-            <img
-              src="/svgs/location.svg"
-              alt=""
-              className="h-[1.6rem] w-[1.6rem]"
-            />
-          </button>
-        </form>
+        </div>
       )}
 
       {comment.replies?.length > 0 && (
