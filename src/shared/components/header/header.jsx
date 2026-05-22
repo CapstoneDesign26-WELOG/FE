@@ -81,7 +81,7 @@ const Header = ({
   const isCenterTitle = variant === 'write';
 
   return (
-    <header className="relative flex h-[6.2rem] items-center border-b border-[#bdbdbd] bg-white px-[2rem]">
+    <header className="sticky top-0 z-10 flex h-[6.2rem] items-center border-b border-gray-300 bg-white px-[2rem]">
       <div className="flex items-center">{renderLeft()}</div>
 
       {title && (

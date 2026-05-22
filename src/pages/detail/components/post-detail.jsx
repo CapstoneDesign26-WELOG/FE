@@ -1,13 +1,12 @@
 const PostDetail = ({ post }) => (
-  <section className="border-b border-gray-300 px-[1.6rem] py-[2rem]">
-    <h1 className="body_16_m">{post.title}</h1>
+  <div>
+    <section className="flex flex-col gap-[0.8rem] px-[1.6rem] py-[2rem]">
+      <h1 className="body_16_m text-gray-black">{post.title}</h1>
+      <p className="cap_12_m text-gray-600">{post.createdAt}</p>
+    </section>
 
-    <p className="cap_14_m mt-[0.6rem] text-gray-500">{post.createdAt}</p>
-
-    {post.content && (
-      <p className="body_16_m mt-[1.2rem] text-gray-800">{post.content}</p>
-    )}
-  </section>
+    <div className="h-[0.1rem] bg-gray-300" />
+  </div>
 );
 
 export default PostDetail;
