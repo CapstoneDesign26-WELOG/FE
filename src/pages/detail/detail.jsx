@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Header from '@/shared/components/header/header';
 import { MOCK_COMMENTS, MOCK_DETAIL_POST } from './constants/mock-detail';
-import CommentInput from './components/comment-input';
 import CommentList from './components/comment-list';
 import PostDetail from './components/post-detail';
+import InputBar from '@/shared/components/input-bar/input-bar';
 
 const countComments = (comments) =>
   comments.reduce(
@@ -33,16 +33,8 @@ const Detail = () => {
 
   const getNextAuthor = () => `익명${countComments(comments) + 1}`;
 
-  const handleCommentChange = (event) => {
-    setCommentValue(event.target.value);
-  };
-
-  const handleCommentSubmit = (event) => {
-    event.preventDefault();
-
+  const handleCommentSubmit = () => {
     const trimmedValue = commentValue.trim();
-
-    if (trimmedValue.length === 0) return;
 
     const newComment = {
       id: Date.now(),
@@ -82,9 +74,9 @@ const Detail = () => {
 
       <CommentList comments={comments} onReplySubmit={handleReplySubmit} />
 
-      <CommentInput
+      <InputBar
         value={commentValue}
-        onChange={handleCommentChange}
+        onChange={setCommentValue}
         onSubmit={handleCommentSubmit}
       />
     </div>

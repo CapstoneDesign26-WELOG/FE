@@ -21,7 +21,7 @@ const InputBar = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="sticky bottom-0 flex w-full items-center gap-[0.8rem] border-t border-gray-100  px-[1.6rem] py-[0.8rem] shadow-2"
+      className="sticky bottom-0 z-10 flex w-full items-center gap-[0.8rem] border-t border-gray-100 bg-gray-white px-[1.6rem] py-[0.8rem] shadow-2"
     >
       <input
         value={value}
@@ -36,8 +36,8 @@ const InputBar = ({
         disabled={isEmpty || disabled}
         aria-label="댓글 작성"
         className={cn(
-          'flex h-[2.8rem] w-[2.8rem] shrink-0 items-center justify-center rounded-full bg-gray-600 cursor-pointer',
-          !isEmpty && 'bg-main-900',
+          'flex h-[2.8rem] w-[2.8rem] shrink-0 items-center justify-center rounded-full bg-gray-600',
+          !isEmpty && 'cursor-pointer bg-main-900',
           (isEmpty || disabled) && 'cursor-not-allowed',
         )}
       >

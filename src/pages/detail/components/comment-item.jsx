@@ -1,3 +1,4 @@
+import { Chat, Heart, HeartFilled } from '@/shared/assets/svgs';
 import { useState } from 'react';
 
 const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
@@ -26,30 +27,26 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
 
   return (
     <li
-      className={`flex flex-col gap-[0.8rem] ${isReply ? 'ml-[1.2rem]' : ''}`}
+      className={`flex flex-col gap-[0.8rem] ${isReply ? 'ml-[1.6rem]' : ''}`}
     >
-      <div className="flex flex-col gap-[0.5rem]">
-        <p className="cap_14_m text-gray-500">{comment.author}</p>
+      <div className="flex flex-col gap-[0.4rem]">
+        <p className="cap_12_m text-gray-600">{comment.author}</p>
 
-        <div className="rounded-[1.2rem] bg-gray-100 px-[1.2rem] py-[1rem]">
+        <div className="rounded-[8px] bg-gray-200 px-[1.6rem] py-[1.2rem]">
           <p className="body_16_m text-gray-900">{comment.content}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-[1.2rem] px-[0.4rem]">
+      <div className="flex items-center gap-[0.8rem] px-[0.4rem]">
         <button
           type="button"
           aria-label="좋아요"
           onClick={handleLikeClick}
-          className={`cap_14_m flex cursor-pointer items-center gap-[0.4rem] ${
-            isLiked ? 'text-red-500' : 'text-gray-500'
+          className={`cap_12_m flex cursor-pointer items-center gap-[0.4rem] ${
+            isLiked ? 'text-welog-red' : 'text-gray-600'
           }`}
         >
-          <img
-            src={isLiked ? '/svgs/heart-filled.svg' : '/svgs/heart.svg'}
-            alt=""
-            className="h-[1.6rem] w-[1.6rem]"
-          />
+          {isLiked ? <HeartFilled width={16} /> : <Heart width={16} />}
           <span>{likeCount}</span>
         </button>
 
@@ -57,13 +54,9 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
           <button
             type="button"
             onClick={() => setIsReplying((prev) => !prev)}
-            className="cap_14_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
+            className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
           >
-            <img
-              src="/svgs/chat.svg"
-              alt=""
-              className="h-[1.6rem] w-[1.6rem]"
-            />
+            <Chat width={16} />
             <span>답글</span>
           </button>
         )}
