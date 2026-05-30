@@ -1,4 +1,4 @@
-import { GoogleLogo, Logo } from '@/shared/assets/svgs';
+import { GoogleLogo, Loading, Logo } from '@/shared/assets/svgs';
 import { postAuthLogin } from '@/shared/apis/auth/auth-mutations';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
@@ -27,10 +27,11 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-between px-[1.6rem] pt-[20rem] pb-[4.8rem]">
-      <div className="flex justify-center">
+    <div className="flex flex-1 flex-col justify-between px-[1.6rem] pt-[10rem] pb-[4.8rem]">
+      <div className="flex flex-col items-center">
         <Logo width={162} />
       </div>
+      <Loading />
 
       <button
         type="button"
