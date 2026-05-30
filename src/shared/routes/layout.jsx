@@ -7,6 +7,7 @@ const HIDDEN_NAV_ROUTES = [
   ROUTES.CREATE,
   ROUTES.MY_POSTS,
   ROUTES.MY_COMMENTS,
+  ROUTES.LOGIN,
 ];
 
 const Layout = () => {
