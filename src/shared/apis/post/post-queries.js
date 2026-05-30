@@ -3,8 +3,16 @@ import { get } from '@/shared/apis/base/https';
 import { END_POINT } from '@/shared/constants/api';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 
-export const getPostList = ({ type = 'PUBLIC', page = 1, limit = 20 } = {}) =>
-  get(END_POINT.GET_POST_LIST({ type, page, limit }));
+export const POST_TYPE = {
+  PRIVATE: 'PRIVATE',
+  PUBLIC: 'PUBLIC',
+};
+
+export const getPostList = ({
+  type = POST_TYPE.PUBLIC,
+  page = 1,
+  limit = 20,
+} = {}) => get(END_POINT.GET_POST_LIST({ type, page, limit }));
 
 export const getPostDetail = (postId) => get(END_POINT.GET_POST_DETAIL(postId));
 
