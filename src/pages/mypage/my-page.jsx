@@ -6,6 +6,11 @@ import { Book, Logout, Profile, Reply } from '@/shared/assets/svgs';
 const MyPage = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate(ROUTES.LOGIN);
+  };
+
   return (
     <div className="flex flex-1 flex-col bg-white">
       <Header title="마이페이지" />
@@ -75,6 +80,7 @@ const MyPage = () => {
         <section className="flex flex-col py-[1.6rem]">
           <button
             type="button"
+            onClick={handleLogout}
             className="flex cursor-pointer items-center py-[1.2rem] gap-[0.8rem] text-left"
           >
             <div className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full bg-gray-300">
