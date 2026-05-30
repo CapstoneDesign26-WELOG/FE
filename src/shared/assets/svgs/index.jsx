@@ -8,6 +8,7 @@ export { default as HeartFilled } from './HeartFilled';
 export { default as Heart } from './Heart';
 export { default as HomeFilled } from './HomeFilled';
 export { default as HomeLined } from './HomeLined';
+export { default as Loading } from './Loading';
 export { default as Location } from './Location';
 export { default as LogoGray } from './LogoGray';
 export { default as Logo } from './Logo';
