@@ -27,11 +27,18 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-between px-[1.6rem] pt-[10rem] pb-[4.8rem]">
-      <div className="flex flex-col items-center">
-        <Logo width={162} />
+    <div className="flex flex-1 flex-col justify-between px-[1.6rem] pt-[8rem] pb-[4.8rem]">
+      <div className="flex flex-col items-center gap-[2rem]">
+        <Logo width={120} />
+        <p className="head_20_sb text-gray-black text-center">
+          다양한 페르소나의 AI와
+          <br />
+          고민을 나누어 보세요
+        </p>
       </div>
-      <Loading />
+      <div className="flex justify-center">
+        <Loading width={315} />
+      </div>
 
       <button
         type="button"
