@@ -14,6 +14,7 @@
     "svgr": "svgr public/svgs --out-dir src/shared/assets/svgs --ext jsx --ignore-existing --no-dimensions && node scripts/create-svg-index.js"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.13.5",
     "@tanstack/react-query": "^5.100.9",
     "@tanstack/react-query-devtools": "^5.100.9",
     "axios": "^1.16.0",
