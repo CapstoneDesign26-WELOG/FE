@@ -5,6 +5,7 @@ import PostList from './components/post-list';
 import { useQuery } from '@tanstack/react-query';
 import { userQueries } from '@/shared/apis/user/user-queries';
 import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
+import { formatTime } from '@/shared/utils/format-time';
 
 const Home = () => {
   const { data: posts = [] } = useQuery(
@@ -17,7 +18,7 @@ const Home = () => {
     id: post.ID,
     title: post.Title,
     commentCount: post.Count,
-    createdAt: post.CreatedAt,
+    createdAt: formatTime(post.CreatedAt),
   }));
 
   // 홈 화면 진입시 api 호출

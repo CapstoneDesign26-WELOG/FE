@@ -4,6 +4,7 @@ import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
 import { useQuery } from '@tanstack/react-query';
 import EmptyState from '../home/components/empty-state';
 import PostList from '../home/components/post-list';
+import { formatTime } from '@/shared/utils/format-time';
 
 const Public = () => {
   const { data: posts = [] } = useQuery(
@@ -16,7 +17,7 @@ const Public = () => {
     id: post.ID,
     title: post.Title,
     commentCount: post.Count,
-    createdAt: post.CreatedAt,
+    createdAt: formatTime(post.CreatedAt),
   }));
 
   return (
