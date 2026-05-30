@@ -16,7 +16,7 @@ const Home = () => {
   console.log(userStatus);
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="relative flex flex-col flex-1">
       <Header variant="logo" />
 
       {posts.length === 0 ? <EmptyState /> : <PostList posts={posts} />}
