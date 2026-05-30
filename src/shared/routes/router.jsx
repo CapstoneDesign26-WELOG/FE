@@ -10,46 +10,59 @@ import Personal from '@/pages/public/public';
 import { ROUTES } from './routes-config';
 import Layout from './layout';
 import Notification from '@/pages/notification/notification';
+import PublicRoutes from './public-routes';
+import ProtectedRoutes from './protected-routes';
 
 export const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
       {
-        path: ROUTES.HOME,
-        element: <Home />,
+        element: <PublicRoutes />,
+        children: [
+          {
+            path: ROUTES.LOGIN,
+            element: <Login />,
+          },
+        ],
       },
       {
-        path: ROUTES.LOGIN,
-        element: <Login />,
-      },
-      {
-        path: ROUTES.CREATE,
-        element: <Create />,
-      },
-      {
-        path: ROUTES.DETAIL(),
-        element: <Detail />,
-      },
-      {
-        path: ROUTES.PUBLIC,
-        element: <Personal />,
-      },
-      {
-        path: ROUTES.MYPAGE,
-        element: <MyPage />,
-      },
-      {
-        path: ROUTES.MY_POSTS,
-        element: <MyPosts />,
-      },
-      {
-        path: ROUTES.MY_COMMENTS,
-        element: <MyComments />,
-      },
-      {
-        path: ROUTES.NOTIFICATION,
-        element: <Notification />,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            path: ROUTES.HOME,
+            element: <Home />,
+          },
+
+          {
+            path: ROUTES.CREATE,
+            element: <Create />,
+          },
+          {
+            path: ROUTES.DETAIL(),
+            element: <Detail />,
+          },
+          {
+            path: ROUTES.PUBLIC,
+            element: <Personal />,
+          },
+          {
+            path: ROUTES.MYPAGE,
+            element: <MyPage />,
+          },
+          {
+            path: ROUTES.MY_POSTS,
+            element: <MyPosts />,
+          },
+          {
+            path: ROUTES.MY_COMMENTS,
+            element: <MyComments />,
+          },
+          {
+            path: ROUTES.NOTIFICATION,
+            element: <Notification />,
+          },
+        ],
       },
     ],
   },
