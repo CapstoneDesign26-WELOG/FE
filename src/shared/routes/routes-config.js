@@ -1,0 +1,11 @@
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  PUBLIC: '/public',
+  CREATE: '/create',
+  DETAIL: (id = ':postId') => `/detail/${id}`,
+  MYPAGE: '/mypage',
+  MY_POSTS: '/mypage/posts',
+  MY_COMMENTS: '/mypage/comments',
+  NOTIFICATION: '/notification',
+};

@@ -1,0 +1,106 @@
+@theme {
+  /* Main */
+  --color-main-1000: #00967f;
+  --color-main-900: #00b890;
+  --color-main-800: #1fc39c;
+  --color-main-700: #3ccda8;
+  --color-main-600: #5ad7b4;
+  --color-main-500: #78e1c0;
+  --color-main-400: #96ebcb;
+  --color-main-300: #b5f2d8;
+  --color-main-200: #d4f8e8;
+  --color-main-100: #f0fcf8;
+
+  /* etc */
+  --color-background: #fafaf8;
+  --color-overlay: rgba(0, 0, 0, 0.3);
+  --color-welog-red: #fa4250;
+
+  /* Grayscale */
+  --color-gray-black: #1a1a1a;
+  --color-gray-900: #3a3a3b;
+  --color-gray-800: #464748;
+  --color-gray-700: #656667;
+  --color-gray-600: #868789;
+  --color-gray-500: #acadae;
+  --color-gray-400: #cacbcd;
+  --color-gray-300: #e4e4e6;
+  --color-gray-200: #f1f1f3;
+  --color-gray-100: #f6f7f9;
+  --color-gray-white: #ffffff;
+}
+
+@layer utilities {
+  /* Shadow */
+  .shadow-1 {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .shadow-2 {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Typography */
+  .title_24_sb {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+    letter-spacing: -1px;
+  }
+
+  .head_20_sb {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0px;
+  }
+
+  .head_20_m {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0px;
+  }
+
+  .subhead_18_sb {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    letter-spacing: 0px;
+  }
+
+  .body_16_b {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0px;
+  }
+
+  .body_16_m {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0px;
+  }
+
+  .cap_14_sb {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0px;
+  }
+
+  .cap_14_m {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0px;
+  }
+
+  .cap_12_m {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0px;
+  }
+}

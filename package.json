@@ -7,21 +7,39 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "svgr": "svgr public/svgs --out-dir src/shared/assets/svgs --ext jsx --ignore-existing --no-dimensions && node scripts/create-svg-index.js"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.13.5",
+    "@tanstack/react-query": "^5.100.9",
+    "@tanstack/react-query-devtools": "^5.100.9",
+    "axios": "^1.16.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.15.0",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@svgr/cli": "^8.1.0",
+    "@tailwindcss/vite": "^4.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "prettier": "^3.8.3",
+    "tailwindcss": "^4.3.0",
     "vite": "^8.0.1"
   },
   "packageManager": "pnpm@10.12.0+sha512.3ab6da6066b7b14d6e9609a31d780191484b8e85f8d0e4581ef333bf4d869799937f5e57cbb8d3da2023019f6d4869a9acc381457fcb1d86e15fc44bfd4eb6a4"
