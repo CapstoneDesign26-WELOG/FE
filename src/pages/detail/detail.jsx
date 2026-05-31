@@ -11,6 +11,7 @@ import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
 import { QUERY_KEY } from '@/shared/constants/query-key';
+import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 
 const mapCommentsToTree = (comments = []) => {
   // TODO: 작성자 기준 익명 번호 부여할지 확인
@@ -43,6 +44,8 @@ const mapCommentsToTree = (comments = []) => {
 };
 
 const Detail = () => {
+  useNotificationStream();
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
