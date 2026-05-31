@@ -1,16 +1,19 @@
-import { Chat, Heart, HeartFilled } from '@/shared/assets/svgs';
+import { Chat, Heart } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import InputBar from '@/shared/components/input-bar/input-bar';
 
-const CommentItem = ({ comment, isReply = false, onReplySubmit, disabled }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const CommentItem = ({
+  comment,
+  isReply = false,
+  onReplySubmit,
+  onLikeClick,
+  disabled,
+}) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
 
-  const likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount;
-
   const handleLikeClick = () => {
-    setIsLiked((prev) => !prev);
+    onLikeClick(comment.id);
   };
 
   const handleReplySubmit = () => {
@@ -40,12 +43,10 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit, disabled }) => {
           type="button"
           aria-label="좋아요"
           onClick={handleLikeClick}
-          className={`cap_12_m flex cursor-pointer items-center gap-[0.4rem] ${
-            isLiked ? 'text-welog-red' : 'text-gray-600'
-          }`}
+          className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
         >
-          {isLiked ? <HeartFilled width={16} /> : <Heart width={16} />}
-          <span>{likeCount}</span>
+          <Heart width={16} />
+          <span>{comment.likeCount}</span>
         </button>
 
         {!isReply && (
@@ -61,16 +62,14 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit, disabled }) => {
       </div>
 
       {isReplying && (
-        <div>
-          <InputBar
-            value={replyValue}
-            onChange={setReplyValue}
-            onSubmit={handleReplySubmit}
-            placeholder="답글을 입력하세요..."
-            variant="reply"
-            disabled={disabled}
-          />
-        </div>
+        <InputBar
+          value={replyValue}
+          onChange={setReplyValue}
+          onSubmit={handleReplySubmit}
+          placeholder="답글을 입력하세요..."
+          variant="reply"
+          disabled={disabled}
+        />
       )}
 
       {comment.replies?.length > 0 && (
@@ -81,6 +80,7 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit, disabled }) => {
               comment={reply}
               isReply
               onReplySubmit={onReplySubmit}
+              onLikeClick={onLikeClick}
               disabled={disabled}
             />
           ))}

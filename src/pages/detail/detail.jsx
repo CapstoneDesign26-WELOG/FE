@@ -71,6 +71,15 @@ const Detail = () => {
     },
   });
 
+  const { mutate: likeComment } = useMutation({
+    ...commentMutations.like,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
+    },
+  });
+
   // TODO: 삭제 로직 테스트
   const handleDeletePost = () => {
     deletePost(postId);
@@ -118,6 +127,10 @@ const Detail = () => {
     });
   };
 
+  const handleCommentLike = (commentId) => {
+    likeComment(commentId);
+  };
+
   if (isLoading) return null;
   if (!post) return null;
 
@@ -130,6 +143,7 @@ const Detail = () => {
       <CommentList
         comments={comments}
         onReplySubmit={handleReplySubmit}
+        onLikeClick={handleCommentLike}
         disabled={isPending}
       />
 
