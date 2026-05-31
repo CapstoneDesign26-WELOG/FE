@@ -3,6 +3,7 @@ export { default as Book } from './Book';
 export { default as ChatFilled } from './ChatFilled';
 export { default as ChatLined } from './ChatLined';
 export { default as Chat } from './Chat';
+export { default as Delete } from './Delete';
 export { default as GoogleLogo } from './GoogleLogo';
 export { default as HeartFilled } from './HeartFilled';
 export { default as Heart } from './Heart';
