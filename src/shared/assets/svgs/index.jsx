@@ -13,6 +13,7 @@ export { default as Location } from './Location';
 export { default as LogoGray } from './LogoGray';
 export { default as Logo } from './Logo';
 export { default as Logout } from './Logout';
+export { default as More } from './More';
 export { default as MyFilled } from './MyFilled';
 export { default as MyLined } from './MyLined';
 export { default as Notifications } from './Notifications';
