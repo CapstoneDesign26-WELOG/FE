@@ -70,7 +70,7 @@ const Detail = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header variant="back" />
+      <Header variant="detail" />
 
       <PostDetail post={post} />
 
