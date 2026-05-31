@@ -1,16 +1,20 @@
-import { Chat, Heart } from '@/shared/assets/svgs';
+import { Chat, Delete, Heart } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import InputBar from '@/shared/components/input-bar/input-bar';
 
 const CommentItem = ({
   comment,
+  myUserId,
   isReply = false,
   onReplySubmit,
   onLikeClick,
+  onDeleteClick,
   disabled,
 }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
+
+  const isMyComment = comment.userId === myUserId;
 
   const handleLikeClick = () => {
     onLikeClick(comment.id);
@@ -24,6 +28,10 @@ const CommentItem = ({
     onReplySubmit(comment.id, trimmedValue);
     setReplyValue('');
     setIsReplying(false);
+  };
+
+  const handleDeleteClick = () => {
+    onDeleteClick(comment.id);
   };
 
   return (
@@ -59,6 +67,18 @@ const CommentItem = ({
             <span>답글</span>
           </button>
         )}
+
+        {isMyComment && (
+          <button
+            type="button"
+            aria-label="댓글 삭제"
+            onClick={handleDeleteClick}
+            className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
+          >
+            <Delete width={16} />
+            <span>삭제</span>
+          </button>
+        )}
       </div>
 
       {isReplying && (
@@ -79,8 +99,10 @@ const CommentItem = ({
               key={reply.id}
               comment={reply}
               isReply
+              myUserId={myUserId}
               onReplySubmit={onReplySubmit}
               onLikeClick={onLikeClick}
+              onDeleteClick={onDeleteClick}
               disabled={disabled}
             />
           ))}

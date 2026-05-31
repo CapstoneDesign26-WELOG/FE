@@ -12,6 +12,7 @@ import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
+import { userQueries } from '@/shared/apis/user/user-queries';
 
 const mapCommentsToTree = (comments = []) => {
   // TODO: 작성자 기준 익명 번호 부여할지 확인
@@ -20,6 +21,7 @@ const mapCommentsToTree = (comments = []) => {
   comments.forEach((comment, index) => {
     commentMap.set(comment.ID, {
       id: comment.ID,
+      userId: comment.UserID,
       parentId: comment.ParentID,
       author: `익명${index + 1}`,
       content: comment.Description,
@@ -44,6 +46,7 @@ const mapCommentsToTree = (comments = []) => {
 };
 
 const Detail = () => {
+  // TODO: 실시간 알림 테스트
   useNotificationStream();
 
   const navigate = useNavigate();
@@ -56,6 +59,7 @@ const Detail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { data, isLoading } = useQuery(postQueries.detail(postId));
+  const { data: myInfo } = useQuery(userQueries.status());
 
   const { mutate: deletePost } = useMutation({
     ...postMutations.delete,
@@ -76,6 +80,15 @@ const Detail = () => {
 
   const { mutate: likeComment } = useMutation({
     ...commentMutations.like,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
+    },
+  });
+
+  const { mutate: removeComment } = useMutation({
+    ...commentMutations.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.POST_DETAIL, postId],
@@ -134,6 +147,10 @@ const Detail = () => {
     likeComment(commentId);
   };
 
+  const handleCommentDelete = (commentId) => {
+    removeComment(commentId);
+  };
+
   if (isLoading) return null;
   if (!post) return null;
 
@@ -145,8 +162,10 @@ const Detail = () => {
 
       <CommentList
         comments={comments}
+        myUserId={myInfo?.ID}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
+        onDeleteClick={handleCommentDelete}
         disabled={isPending}
       />
 
