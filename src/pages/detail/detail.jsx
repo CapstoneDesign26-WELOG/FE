@@ -5,10 +5,12 @@ import CommentList from './components/comment-list';
 import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
 import { formatTime } from '@/shared/utils/format-time';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postQueries } from '@/shared/apis/post/post-queries';
 import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
+import { commentMutations } from '@/shared/apis/comment/comment-mutations';
+import { QUERY_KEY } from '@/shared/constants/query-key';
 
 const mapCommentsToTree = (comments = []) => {
   // TODO: 작성자 기준 익명 번호 부여할지 확인
@@ -42,6 +44,8 @@ const mapCommentsToTree = (comments = []) => {
 
 const Detail = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const { postId } = useParams();
 
   const [commentValue, setCommentValue] = useState('');
@@ -55,6 +59,15 @@ const Detail = () => {
     onSuccess: () => {
       setIsDeleteModalOpen(false);
       navigate(ROUTES.HOME);
+    },
+  });
+
+  const { mutate: createComment, isPending } = useMutation({
+    ...commentMutations.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
     },
   });
 
@@ -75,13 +88,34 @@ const Detail = () => {
   const comments = mapCommentsToTree(data?.comments);
 
   const handleCommentSubmit = () => {
-    // TODO: 댓글 작성 API 연결
-    setCommentValue('');
+    const trimmedValue = commentValue.trim();
+
+    if (trimmedValue.length === 0 || isPending) return;
+
+    createComment(
+      {
+        postId: Number(postId),
+        description: trimmedValue,
+        parentId: null,
+      },
+      {
+        onSuccess: () => {
+          setCommentValue('');
+        },
+      },
+    );
   };
 
   const handleReplySubmit = (parentId, replyContent) => {
-    // TODO: 답글 작성 API 연결
-    console.log(parentId, replyContent);
+    const trimmedValue = replyContent.trim();
+
+    if (trimmedValue.length === 0 || isPending) return;
+
+    createComment({
+      postId: Number(postId),
+      description: trimmedValue,
+      parentId,
+    });
   };
 
   if (isLoading) return null;
@@ -93,12 +127,17 @@ const Detail = () => {
 
       <PostDetail post={post} />
 
-      <CommentList comments={comments} onReplySubmit={handleReplySubmit} />
+      <CommentList
+        comments={comments}
+        onReplySubmit={handleReplySubmit}
+        disabled={isPending}
+      />
 
       <InputBar
         value={commentValue}
         onChange={setCommentValue}
         onSubmit={handleCommentSubmit}
+        disabled={isPending}
       />
 
       {isOptionOpen && (

@@ -2,7 +2,7 @@ import { Chat, Heart, HeartFilled } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import InputBar from '@/shared/components/input-bar/input-bar';
 
-const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
+const CommentItem = ({ comment, isReply = false, onReplySubmit, disabled }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
@@ -68,6 +68,7 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
             onSubmit={handleReplySubmit}
             placeholder="답글을 입력하세요..."
             variant="reply"
+            disabled={disabled}
           />
         </div>
       )}
@@ -80,6 +81,7 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
               comment={reply}
               isReply
               onReplySubmit={onReplySubmit}
+              disabled={disabled}
             />
           ))}
         </ul>
