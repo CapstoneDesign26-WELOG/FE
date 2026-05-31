@@ -1,5 +1,5 @@
 export const QUERY_KEY = {
-  POSTS: 'posts',
+  POST_LIST: 'postList',
   POST_DETAIL: 'postDetail',
   MY_INFO: 'myInfo',
   USER_STATUS: 'userStatus',

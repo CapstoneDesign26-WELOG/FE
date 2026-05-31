@@ -1,16 +1,23 @@
-import { Chat, Heart, HeartFilled } from '@/shared/assets/svgs';
+import { Chat, Delete, Heart } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import InputBar from '@/shared/components/input-bar/input-bar';
 
-const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const CommentItem = ({
+  comment,
+  myUserId,
+  isReply = false,
+  onReplySubmit,
+  onLikeClick,
+  onDeleteClick,
+  disabled,
+}) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
 
-  const likeCount = isLiked ? comment.likeCount + 1 : comment.likeCount;
+  const isMyComment = comment.userId === myUserId;
 
   const handleLikeClick = () => {
-    setIsLiked((prev) => !prev);
+    onLikeClick(comment.id);
   };
 
   const handleReplySubmit = () => {
@@ -21,6 +28,10 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
     onReplySubmit(comment.id, trimmedValue);
     setReplyValue('');
     setIsReplying(false);
+  };
+
+  const handleDeleteClick = () => {
+    onDeleteClick(comment.id);
   };
 
   return (
@@ -40,12 +51,10 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
           type="button"
           aria-label="좋아요"
           onClick={handleLikeClick}
-          className={`cap_12_m flex cursor-pointer items-center gap-[0.4rem] ${
-            isLiked ? 'text-welog-red' : 'text-gray-600'
-          }`}
+          className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
         >
-          {isLiked ? <HeartFilled width={16} /> : <Heart width={16} />}
-          <span>{likeCount}</span>
+          <Heart width={16} />
+          <span>{comment.likeCount}</span>
         </button>
 
         {!isReply && (
@@ -58,18 +67,29 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
             <span>답글</span>
           </button>
         )}
+
+        {isMyComment && (
+          <button
+            type="button"
+            aria-label="댓글 삭제"
+            onClick={handleDeleteClick}
+            className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
+          >
+            <Delete width={16} />
+            <span>삭제</span>
+          </button>
+        )}
       </div>
 
       {isReplying && (
-        <div>
-          <InputBar
-            value={replyValue}
-            onChange={setReplyValue}
-            onSubmit={handleReplySubmit}
-            placeholder="답글을 입력하세요..."
-            variant="reply"
-          />
-        </div>
+        <InputBar
+          value={replyValue}
+          onChange={setReplyValue}
+          onSubmit={handleReplySubmit}
+          placeholder="답글을 입력하세요..."
+          variant="reply"
+          disabled={disabled}
+        />
       )}
 
       {comment.replies?.length > 0 && (
@@ -79,7 +99,11 @@ const CommentItem = ({ comment, isReply = false, onReplySubmit }) => {
               key={reply.id}
               comment={reply}
               isReply
+              myUserId={myUserId}
               onReplySubmit={onReplySubmit}
+              onLikeClick={onLikeClick}
+              onDeleteClick={onDeleteClick}
+              disabled={disabled}
             />
           ))}
         </ul>

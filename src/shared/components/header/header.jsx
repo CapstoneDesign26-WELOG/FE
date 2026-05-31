@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Logo, Notifications } from '@/shared/assets/svgs';
+import { ArrowLeft, Logo, More, Notifications } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
 
 const Header = ({
@@ -33,7 +33,7 @@ const Header = ({
   const renderLeft = () => {
     if (variant === 'logo') return <Logo width={56} />;
 
-    if (variant === 'back' || variant === 'write') {
+    if (variant === 'back' || variant === 'write' || variant === 'detail') {
       return (
         <button
           type="button"
@@ -71,6 +71,19 @@ const Header = ({
           onClick={onRightClick}
         >
           {rightText}
+        </button>
+      );
+    }
+
+    if (variant === 'detail') {
+      return (
+        <button
+          type="button"
+          aria-label="더보기"
+          onClick={onRightClick}
+          className="cursor-pointer"
+        >
+          <More width={24} />
         </button>
       );
     }
