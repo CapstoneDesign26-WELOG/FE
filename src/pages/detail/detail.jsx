@@ -1,70 +1,72 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '@/shared/components/header/header';
-import { MOCK_COMMENTS, MOCK_DETAIL_POST } from './constants/mock-detail';
 import CommentList from './components/comment-list';
 import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
+import { formatTime } from '@/shared/utils/format-time';
+import { useQuery } from '@tanstack/react-query';
+import { postQueries } from '@/shared/apis/post/post-queries';
 
-const countComments = (comments) =>
-  comments.reduce(
-    (count, comment) => count + 1 + countComments(comment.replies ?? []),
-    0,
-  );
+const mapCommentsToTree = (comments = []) => {
+  // TODO: 작성자 기준 익명 번호 부여할지 확인
+  const commentMap = new Map();
 
-const addReplyToComment = (comments, parentId, newReply) =>
-  comments.map((comment) => {
-    if (comment.id === parentId) {
-      return {
-        ...comment,
-        replies: [...(comment.replies ?? []), newReply],
-      };
-    }
-
-    return {
-      ...comment,
-      replies: addReplyToComment(comment.replies ?? [], parentId, newReply),
-    };
+  comments.forEach((comment, index) => {
+    commentMap.set(comment.ID, {
+      id: comment.ID,
+      parentId: comment.ParentID,
+      author: `익명${index + 1}`,
+      content: comment.Description,
+      likeCount: comment.LikeCount,
+      createdAt: formatTime(comment.CreatedAt),
+      replies: [],
+    });
   });
 
+  const rootComments = [];
+
+  commentMap.forEach((comment) => {
+    if (comment.parentId) {
+      commentMap.get(comment.parentId)?.replies.push(comment);
+      return;
+    }
+
+    rootComments.push(comment);
+  });
+
+  return rootComments;
+};
+
 const Detail = () => {
-  const post = MOCK_DETAIL_POST;
-  const [comments, setComments] = useState(MOCK_COMMENTS);
+  const { postId } = useParams();
   const [commentValue, setCommentValue] = useState('');
 
-  const getNextAuthor = () => `익명${countComments(comments) + 1}`;
+  const { data, isLoading } = useQuery(postQueries.detail(postId));
+
+  const post = data?.post
+    ? {
+        id: data.post.ID,
+        title: data.post.Title,
+        description: data.post.Description,
+        createdAt: formatTime(data.post.CreatedAt),
+      }
+    : null;
+
+  const comments = mapCommentsToTree(data?.comments);
 
   const handleCommentSubmit = () => {
-    const trimmedValue = commentValue.trim();
-
-    const newComment = {
-      id: Date.now(),
-      author: getNextAuthor(),
-      content: trimmedValue,
-      likeCount: 0,
-      replies: [],
-    };
-
-    setComments((prevComments) => [...prevComments, newComment]);
+    // TODO: 댓글 작성 API 연결
     setCommentValue('');
   };
 
   const handleReplySubmit = (parentId, replyContent) => {
-    const trimmedValue = replyContent.trim();
-
-    if (trimmedValue.length === 0) return;
-
-    const newReply = {
-      id: Date.now(),
-      author: getNextAuthor(),
-      content: trimmedValue,
-      likeCount: 0,
-      replies: [],
-    };
-
-    setComments((prevComments) =>
-      addReplyToComment(prevComments, parentId, newReply),
-    );
+    // TODO: 답글 작성 API 연결
+    console.log(parentId, replyContent);
   };
+
+  if (isLoading) return null;
+  if (!post) return null;
 
   return (
     <div className="flex min-h-screen flex-col">
