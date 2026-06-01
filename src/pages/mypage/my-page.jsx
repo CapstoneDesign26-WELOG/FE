@@ -2,9 +2,23 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/shared/components/header/header';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { Book, Logout, Profile, Reply } from '@/shared/assets/svgs';
+import { useState } from 'react';
+import { AI_COMMENT_TYPES, DEFAULT_AI_COMMENT_TYPE } from './constants/my-page';
 
 const MyPage = () => {
   const navigate = useNavigate();
+
+  const [selectedAiType, setSelectedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
+  const [savedAiType, setSavedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
+
+  const isAiTypeChanged = selectedAiType !== savedAiType;
+
+  const handleAiTypeEdit = () => {
+    if (!isAiTypeChanged) return;
+
+    // TODO: AI 댓글 선호 유형 수정 API 연결
+    setSavedAiType(selectedAiType);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -16,7 +30,7 @@ const MyPage = () => {
       <Header title="마이페이지" />
 
       <main className="flex flex-1 flex-col px-[1.6rem] pt-[2.8rem]">
-        <section className="flex flex-col items-center gap-[1.2rem] rounded-[12px] bg-gray-100 p-[2rem]">
+        <section className="flex flex-col items-center gap-[1.2rem] rounded-[12px] bg-gray-100 py-[1.6rem]">
           <Profile width={40} height={40} />
 
           <p className="subhead_18_sb text-gray-black">사용자</p>
@@ -38,6 +52,60 @@ const MyPage = () => {
             </div>
           </div>
         </section>
+
+        <section className="flex flex-col py-[2rem]">
+          <div className="mb-[1.6rem] flex items-center justify-between">
+            <div>
+              <p className="body_16_b text-gray-black">AI 댓글 선호 유형</p>
+              <p className="cap_12_m pt-[0.4rem] text-gray-600">
+                더 선호하는 AI 댓글 스타일을 선택하세요
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleAiTypeEdit}
+              disabled={!isAiTypeChanged}
+              className="py-[0.4rem] px-[0.8rem] rounded-[8px] cap_14_m disabled:text-gray-100 disabled:bg-gray-500 disabled:cursor-not-allowed text-gray-white bg-main-1000 cursor-pointer"
+            >
+              수정
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-[1.2rem]">
+            {AI_COMMENT_TYPES.map((type) => {
+              const isSelected = selectedAiType === type.id;
+
+              return (
+                <button
+                  key={type.id}
+                  type="button"
+                  onClick={() => setSelectedAiType(type.id)}
+                  className={`flex items-center justify-between rounded-[12px] border px-[1.6rem] py-[1.6rem] text-left cursor-pointer ${
+                    isSelected
+                      ? 'border-main-1000 bg-main-100'
+                      : 'border-gray-300 bg-white'
+                  }`}
+                >
+                  <div>
+                    <p className="body_16_b text-gray-black">{type.title}</p>
+                    <p className="cap_14_m pt-[0.8rem] text-gray-600">
+                      {type.description}
+                    </p>
+                  </div>
+
+                  {isSelected && (
+                    <span className="flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-main-900">
+                      <span className="h-[0.8rem] w-[0.8rem] rounded-full bg-white" />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <div className="-mx-[1.6rem] h-[0.1rem] bg-gray-300" />
 
         <section className="flex flex-col py-[1.6rem]">
           <button
