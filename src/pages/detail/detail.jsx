@@ -6,7 +6,7 @@ import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
 import { formatTime } from '@/shared/utils/format-time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { postQueries } from '@/shared/apis/post/post-queries';
+import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
 import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
@@ -61,11 +61,29 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const post = data?.post
+    ? {
+        id: data.post.ID,
+        title: data.post.Title,
+        description: data.post.Description,
+        createdAt: formatTime(data.post.CreatedAt),
+      }
+    : null;
+
+  const comments = mapCommentsToTree(data?.comments);
+
+  const postType = data?.post?.Type;
+
   const { mutate: deletePost } = useMutation({
     ...postMutations.delete,
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsDeleteModalOpen(false);
-      navigate(ROUTES.HOME);
+
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_LIST, postType],
+      });
+
+      navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
     },
   });
 
@@ -96,21 +114,9 @@ const Detail = () => {
     },
   });
 
-  // TODO: 삭제 로직 테스트
   const handleDeletePost = () => {
     deletePost(postId);
   };
-
-  const post = data?.post
-    ? {
-        id: data.post.ID,
-        title: data.post.Title,
-        description: data.post.Description,
-        createdAt: formatTime(data.post.CreatedAt),
-      }
-    : null;
-
-  const comments = mapCommentsToTree(data?.comments);
 
   const handleCommentSubmit = () => {
     const trimmedValue = commentValue.trim();
