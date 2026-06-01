@@ -32,7 +32,18 @@ const Header = ({
   };
 
   const renderLeft = () => {
-    if (variant === 'logo') return <Logo width={56} />;
+    if (variant === 'logo') {
+      return (
+        <button
+          type="button"
+          aria-label="홈으로 이동"
+          onClick={() => navigate(ROUTES.HOME)}
+          className="cursor-pointer"
+        >
+          <Logo width={56} />
+        </button>
+      );
+    }
 
     if (variant === 'back' || variant === 'write' || variant === 'detail') {
       return (
