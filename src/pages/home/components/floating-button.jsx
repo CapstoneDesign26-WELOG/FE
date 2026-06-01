@@ -2,11 +2,11 @@ import { Plus } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { useNavigate } from 'react-router-dom';
 
-const FloatingButton = () => {
+const FloatingButton = ({ type }) => {
   const navigate = useNavigate();
 
   const handleClickCreate = () => {
-    navigate(ROUTES.CREATE);
+    navigate(ROUTES.CREATE, { state: { type } });
   };
 
   return (

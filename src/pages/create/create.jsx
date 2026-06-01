@@ -1,21 +1,32 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@/shared/components/header/header';
 import { postMutations } from '@/shared/apis/post/post-mutations';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ROUTES } from '@/shared/routes/routes-config';
+import { POST_TYPE } from '@/shared/apis/post/post-queries';
+import { QUERY_KEY } from '@/shared/constants/query-key';
 
 const Create = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryClient = useQueryClient();
+
+  const postType = location.state?.type ?? POST_TYPE.PUBLIC;
 
   const isCompleteDisabled =
     title.trim().length === 0 || content.trim().length === 0;
 
   const { mutate: createPost, isPending } = useMutation({
     ...postMutations.create,
-    onSuccess: () => {
-      navigate(-1);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_LIST, postType],
+      });
+
+      navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
     },
   });
 
@@ -25,7 +36,7 @@ const Create = () => {
     createPost({
       title: title.trim(),
       description: content.trim(),
-      type: 'PUBLIC',
+      type: postType,
     });
   };
 

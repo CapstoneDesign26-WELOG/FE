@@ -37,7 +37,7 @@ const Home = () => {
       )}
 
       <div className="absolute right-[1.6rem] bottom-[3rem]">
-        <FloatingButton />
+        <FloatingButton type={POST_TYPE.PRIVATE} />
       </div>
     </div>
   );

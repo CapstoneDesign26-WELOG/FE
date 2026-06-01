@@ -21,7 +21,7 @@ const Public = () => {
   }));
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="relative flex flex-col flex-1">
       <Header variant="logo" />
 
       {mappedPosts.length === 0 ? (
@@ -31,7 +31,7 @@ const Public = () => {
       )}
 
       <div className="absolute right-[1.6rem] bottom-[3rem]">
-        <FloatingButton />
+        <FloatingButton type={POST_TYPE.PUBLIC} />
       </div>
     </div>
   );
