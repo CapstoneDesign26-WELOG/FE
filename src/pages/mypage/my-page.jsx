@@ -4,9 +4,24 @@ import { ROUTES } from '@/shared/routes/routes-config';
 import { Book, Logout, Profile, Reply } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import { AI_COMMENT_TYPES, DEFAULT_AI_COMMENT_TYPE } from './constants/my-page';
+import { myQueries } from '@/shared/apis/my/my-queries';
+import { useQuery } from '@tanstack/react-query';
 
 const MyPage = () => {
   const navigate = useNavigate();
+
+  const { data: myInfo } = useQuery(myQueries.info());
+
+  const user = myInfo?.user;
+  const posts = myInfo?.posts ?? [];
+  const comments = myInfo?.comments ?? [];
+
+  const postCount = posts.length;
+
+  const receivedLikeCount = comments.reduce(
+    (total, comment) => total + comment.like_count,
+    0,
+  );
 
   const [selectedAiType, setSelectedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
   const [savedAiType, setSavedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
@@ -33,22 +48,26 @@ const MyPage = () => {
         <section className="flex flex-col items-center gap-[1.2rem] rounded-[12px] bg-gray-100 py-[1.6rem]">
           <Profile width={40} height={40} />
 
-          <p className="subhead_18_sb text-gray-black">사용자</p>
+          <p className="subhead_18_sb text-gray-black">
+            {user?.Nickname ?? '사용자'}
+          </p>
 
           <div className="w-full grid grid-cols-3 text-center px-[1.2rem] py-[0.8rem]">
             <div className="flex flex-col gap-[0.2rem]">
               <p className="cap_14_sb text-gray-700">작성한 글</p>
-              <p className="head_20_sb text-main-900">1</p>
-            </div>
-
-            <div className="flex flex-col gap-[0.2rem]">
-              <p className="cap_14_sb text-gray-700">댓글</p>
-              <p className="head_20_sb text-main-900">3</p>
+              <p className="head_20_sb text-main-900">{postCount}</p>
             </div>
 
             <div className="flex flex-col gap-[0.2rem]">
               <p className="cap_14_sb text-gray-700">받은 좋아요</p>
-              <p className="head_20_sb text-main-900">3</p>
+              <p className="head_20_sb text-main-900">{receivedLikeCount}</p>
+            </div>
+
+            <div className="flex flex-col gap-[0.2rem]">
+              <p className="cap_14_sb text-gray-700">남은 토큰</p>
+              <p className="head_20_sb text-main-900">
+                {user?.TokenCount ?? 0}
+              </p>
             </div>
           </div>
         </section>
