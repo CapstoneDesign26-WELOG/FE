@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Logo, More, Notifications } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
+import { useState, useEffect } from 'react';
 
 const Header = ({
   title,
@@ -12,13 +13,30 @@ const Header = ({
   disabled,
 }) => {
   const navigate = useNavigate();
+  const [hasNotification, setHasNotification] = useState(false);
+
+  useEffect(() => {
+    const checkNotifications = () => {
+      const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+      setHasNotification(notifications.some((n) => !n.isRead));
+    };
+
+    checkNotifications();
+
+    window.addEventListener('storage', checkNotifications);
+    window.addEventListener('notification-updated', checkNotifications);
+
+    return () => {
+      window.removeEventListener('storage', checkNotifications);
+      window.removeEventListener('notification-updated', checkNotifications);
+    };
+  }, []);
 
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick();
       return;
     }
-
     navigate(-1);
   };
 
@@ -27,6 +45,11 @@ const Header = ({
       onNotificationClick();
       return;
     }
+
+    const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+    const updated = notifications.map((n) => ({ ...n, isRead: true }));
+    localStorage.setItem('notifications', JSON.stringify(updated));
+    setHasNotification(false);
 
     navigate(ROUTES.NOTIFICATION);
   };
@@ -68,9 +91,12 @@ const Header = ({
           type="button"
           aria-label="알림"
           onClick={handleNotificationClick}
-          className="cursor-pointer"
+          className="relative cursor-pointer"
         >
           <Notifications width={30} />
+          {hasNotification && (
+            <span className="absolute right-0 top-0 h-[0.8rem] w-[0.8rem] rounded-full bg-red-500" />
+          )}
         </button>
       );
     }
