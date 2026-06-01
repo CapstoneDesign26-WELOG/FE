@@ -9,6 +9,7 @@ const Header = ({
   onBackClick,
   onNotificationClick,
   onRightClick,
+  disabled,
 }) => {
   const navigate = useNavigate();
 
@@ -67,8 +68,9 @@ const Header = ({
       return (
         <button
           type="button"
-          className="body_16_m text-gray-600"
+          className="body_16_m cursor-pointer text-gray-black disabled:cursor-default disabled:text-gray-600"
           onClick={onRightClick}
+          disabled={disabled}
         >
           {rightText}
         </button>
