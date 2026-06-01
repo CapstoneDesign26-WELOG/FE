@@ -18,12 +18,12 @@ const MyComments = () => {
         <ul className="flex flex-col">
           {/* TODO: postId 내려주면 라우트 연결  */}
           {comments.map((comment) => (
-            <li key={comment.id} className="border-b border-[#EFF0F4]">
+            <li key={comment.id} className="border-b border-gray-300">
               <Link
                 to={ROUTES.DETAIL(comment.post_id)}
                 className="block py-[1.2rem]"
               >
-                <p className="body_16_m truncate text-black">
+                <p className="body_16_m truncate text-gray-black">
                   {comment.post_title}
                 </p>
                 <p className="cap_12_m mt-[0.4rem] text-gray-500">
