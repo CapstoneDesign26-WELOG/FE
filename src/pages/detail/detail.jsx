@@ -46,13 +46,12 @@ const mapCommentsToTree = (comments = []) => {
 };
 
 const Detail = () => {
-  // TODO: 실시간 알림 테스트
-  useNotificationStream();
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  // TODO: 실시간 알림 테스트
   const { postId } = useParams();
+  useNotificationStream(postId);
 
   const [commentValue, setCommentValue] = useState('');
   const [isOptionOpen, setIsOptionOpen] = useState(false);
