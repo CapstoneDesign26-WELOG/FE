@@ -6,6 +6,7 @@ export const END_POINT = {
 
   // 유저
   GET_USER_STATUS: '/api/users/me',
+  PATCH_USER_PREFERENCE: '/api/users/me/preference',
 
   // 게시글
   GET_POST_LIST: ({ type = 'PUBLIC', page = 1, limit = 20 }) =>
