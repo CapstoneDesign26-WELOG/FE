@@ -9,8 +9,11 @@ export const END_POINT = {
   PATCH_USER_PREFERENCE: '/api/users/me/preference',
 
   // 게시글
-  GET_POST_LIST: ({ type = 'PUBLIC', page = 1, limit = 20 }) =>
-    `/api/posts?type=${type}&page=${page}&limit=${limit}`,
+  GET_PRIVATE_POST_LIST: ({ page = 1, limit = 20 }) =>
+    `/api/posts/private?page=${page}&limit=${limit}`,
+
+  GET_PUBLIC_POST_LIST: ({ page = 1, limit = 20 }) =>
+    `/api/posts/public?page=${page}&limit=${limit}`,
   GET_POST_DETAIL: (postId) => `/api/posts/${postId}`,
   POST_NEW_POST: '/api/posts',
   DELETE_POST: (postId) => `/api/posts/${postId}`,
