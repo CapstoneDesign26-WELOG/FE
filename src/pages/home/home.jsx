@@ -16,7 +16,7 @@ const Home = () => {
   const mappedPosts = posts.map((post) => ({
     id: post.ID,
     title: post.Title,
-    commentCount: post.Count,
+    commentCount: post.comment_count,
     createdAt: formatTime(post.CreatedAt),
   }));
 
