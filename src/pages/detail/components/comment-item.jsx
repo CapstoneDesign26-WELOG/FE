@@ -12,7 +12,7 @@ const CommentItem = ({
   onDeleteClick,
   disabled,
 }) => {
-  const [isLiked, setIsLiked] = useState(comment.likeCount > 0);
+  const [isLiked, setIsLiked] = useState(comment.isLiked);
   const [likeCount, setLikeCount] = useState(comment.likeCount);
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');

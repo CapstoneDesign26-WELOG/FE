@@ -177,7 +177,7 @@ const Detail = () => {
 
       <CommentList
         comments={comments}
-        myUserId={myInfo?.id}
+        myUserId={myInfo?.user_id}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
         onUnlikeClick={handleCommentUnlike}
