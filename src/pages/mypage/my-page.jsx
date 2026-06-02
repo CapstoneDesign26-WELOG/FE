@@ -9,9 +9,25 @@ import { userMutations } from '@/shared/apis/user/user-mutations';
 import { AI_COMMENT_TYPES, DEFAULT_AI_COMMENT_TYPE } from './constants/my-page';
 
 const MyPage = () => {
+  const { data: myInfo } = useQuery(myQueries.info());
+
+  if (!myInfo) return null;
+
+  return <MyPageContent myInfo={myInfo} />;
+};
+
+const MyPageContent = ({ myInfo }) => {
   const navigate = useNavigate();
 
-  const { data: myInfo } = useQuery(myQueries.info());
+  const user = myInfo.user;
+  const posts = myInfo.posts ?? [];
+  const comments = myInfo.comments ?? [];
+
+  const initialAiType = user?.AIPreference ?? DEFAULT_AI_COMMENT_TYPE;
+
+  const [selectedAiType, setSelectedAiType] = useState(initialAiType);
+  const [savedAiType, setSavedAiType] = useState(initialAiType);
+
   const { mutate: updateAiPreference, isPending } = useMutation({
     ...userMutations.preference,
     onSuccess: () => {
@@ -19,19 +35,12 @@ const MyPage = () => {
     },
   });
 
-  const user = myInfo?.user;
-  const posts = myInfo?.posts ?? [];
-  const comments = myInfo?.comments ?? [];
-
   const postCount = posts.length;
 
   const receivedLikeCount = comments.reduce(
     (total, comment) => total + comment.like_count,
     0,
   );
-
-  const [selectedAiType, setSelectedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
-  const [savedAiType, setSavedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
 
   const isAiTypeChanged = selectedAiType !== savedAiType;
 
