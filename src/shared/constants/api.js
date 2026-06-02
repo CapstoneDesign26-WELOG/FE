@@ -6,10 +6,14 @@ export const END_POINT = {
 
   // 유저
   GET_USER_STATUS: '/api/users/me',
+  PATCH_USER_PREFERENCE: '/api/users/me/preference',
 
   // 게시글
-  GET_POST_LIST: ({ type = 'PUBLIC', page = 1, limit = 20 }) =>
-    `/api/posts?type=${type}&page=${page}&limit=${limit}`,
+  GET_PRIVATE_POST_LIST: ({ page = 1, limit = 20 }) =>
+    `/api/posts/private?page=${page}&limit=${limit}`,
+
+  GET_PUBLIC_POST_LIST: ({ page = 1, limit = 20 }) =>
+    `/api/posts/public?page=${page}&limit=${limit}`,
   GET_POST_DETAIL: (postId) => `/api/posts/${postId}`,
   POST_NEW_POST: '/api/posts',
   DELETE_POST: (postId) => `/api/posts/${postId}`,
@@ -18,6 +22,7 @@ export const END_POINT = {
   POST_NEW_COMMENT: (postId) => `/api/posts/${postId}/comments`,
   DELETE_COMMENT: (commentId) => `/api/comments/${commentId}`,
   POST_COMMENT_LIKE: (commentId) => `/api/comments/${commentId}/like`,
+  DELETE_COMMENT_LIKE: (commentId) => `/api/comments/${commentId}/unlike`,
 
   // 실시간 알림
   GET_NOTIFICATION: '/api/notifications/stream',

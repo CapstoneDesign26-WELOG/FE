@@ -12,12 +12,19 @@ export const getPostList = ({
   type = POST_TYPE.PUBLIC,
   page = 1,
   limit = 20,
-} = {}) => get(END_POINT.GET_POST_LIST({ type, page, limit }));
+} = {}) => {
+  const endpoint =
+    type === POST_TYPE.PRIVATE
+      ? END_POINT.GET_PRIVATE_POST_LIST({ page, limit })
+      : END_POINT.GET_PUBLIC_POST_LIST({ page, limit });
+
+  return get(endpoint);
+};
 
 export const getPostDetail = (postId) => get(END_POINT.GET_POST_DETAIL(postId));
 
 export const postQueries = {
-  list: ({ type = 'PUBLIC', page = 1, limit = 20 } = {}) =>
+  list: ({ type = POST_TYPE.PUBLIC, page = 1, limit = 20 } = {}) =>
     queryOptions({
       queryKey: [QUERY_KEY.POST_LIST, type, page, limit],
       queryFn: () => getPostList({ type, page, limit }),

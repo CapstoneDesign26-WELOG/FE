@@ -5,6 +5,7 @@ const CommentList = ({
   myUserId,
   onReplySubmit,
   onLikeClick,
+  onUnlikeClick,
   onDeleteClick,
   disabled,
 }) => (
@@ -17,6 +18,7 @@ const CommentList = ({
           myUserId={myUserId}
           onReplySubmit={onReplySubmit}
           onLikeClick={onLikeClick}
+          onUnlikeClick={onUnlikeClick}
           onDeleteClick={onDeleteClick}
           disabled={disabled}
         />

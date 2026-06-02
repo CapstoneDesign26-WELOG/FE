@@ -1,4 +1,4 @@
-import { Chat, Delete, Heart } from '@/shared/assets/svgs';
+import { Chat, Delete, Heart, HeartFilled } from '@/shared/assets/svgs';
 import { useState } from 'react';
 import InputBar from '@/shared/components/input-bar/input-bar';
 
@@ -8,16 +8,27 @@ const CommentItem = ({
   isReply = false,
   onReplySubmit,
   onLikeClick,
+  onUnlikeClick,
   onDeleteClick,
   disabled,
 }) => {
+  const [isLiked, setIsLiked] = useState(comment.isLiked);
+  const [likeCount, setLikeCount] = useState(comment.likeCount);
   const [isReplying, setIsReplying] = useState(false);
   const [replyValue, setReplyValue] = useState('');
 
   const isMyComment = comment.userId === myUserId;
 
   const handleLikeClick = () => {
-    onLikeClick(comment.id);
+    if (isLiked) {
+      onUnlikeClick(comment.id);
+      setLikeCount((prev) => Math.max(prev - 1, 0));
+    } else {
+      onLikeClick(comment.id);
+      setLikeCount((prev) => prev + 1);
+    }
+
+    setIsLiked((prev) => !prev);
   };
 
   const handleReplySubmit = () => {
@@ -51,10 +62,12 @@ const CommentItem = ({
           type="button"
           aria-label="좋아요"
           onClick={handleLikeClick}
-          className="cap_12_m flex cursor-pointer items-center gap-[0.4rem] text-gray-600"
+          className={`cap_12_m flex cursor-pointer items-center gap-[0.4rem] ${
+            isLiked ? 'text-welog-red' : 'text-gray-600'
+          }`}
         >
-          <Heart width={16} />
-          <span>{comment.likeCount}</span>
+          {isLiked ? <HeartFilled width={16} /> : <Heart width={16} />}
+          <span>{likeCount}</span>
         </button>
 
         {!isReply && (
@@ -102,6 +115,7 @@ const CommentItem = ({
               myUserId={myUserId}
               onReplySubmit={onReplySubmit}
               onLikeClick={onLikeClick}
+              onUnlikeClick={onUnlikeClick}
               onDeleteClick={onDeleteClick}
               disabled={disabled}
             />
