@@ -58,6 +58,9 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const myUserId = myInfo?.user_id;
+  const isMyPost = data?.user_id === myUserId;
+
   const post = data
     ? {
         id: data.id,
@@ -171,7 +174,10 @@ const Detail = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Header variant="detail" onRightClick={() => setIsOptionOpen(true)} />
+      <Header
+        variant="detail"
+        onRightClick={isMyPost ? () => setIsOptionOpen(true) : undefined}
+      />
 
       <PostDetail post={post} />
 
@@ -192,7 +198,7 @@ const Detail = () => {
         disabled={isPending}
       />
 
-      {isOptionOpen && (
+      {isMyPost && isOptionOpen && (
         <div
           className="absolute inset-0 z-40"
           onClick={() => setIsOptionOpen(false)}
