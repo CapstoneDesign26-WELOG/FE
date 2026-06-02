@@ -14,15 +14,36 @@ import { QUERY_KEY } from '@/shared/constants/query-key';
 import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 import { userQueries } from '@/shared/apis/user/user-queries';
 
-const mapCommentsToTree = (comments = []) => {
+const mapCommentsToTree = (comments = [], postUserId) => {
   const commentMap = new Map();
+  const anonymousMap = new Map();
+  let anonymousCount = 1;
 
-  comments.forEach((comment, index) => {
+  const getAuthorName = (comment) => {
+    if (comment.user_id === postUserId) {
+      return '글쓴이';
+    }
+
+    if (comment.is_ai) {
+      const authorName = `익명${anonymousCount}`;
+      anonymousCount += 1;
+      return authorName;
+    }
+
+    if (!anonymousMap.has(comment.user_id)) {
+      anonymousMap.set(comment.user_id, `익명${anonymousCount}`);
+      anonymousCount += 1;
+    }
+
+    return anonymousMap.get(comment.user_id);
+  };
+
+  comments.forEach((comment) => {
     commentMap.set(comment.id, {
       id: comment.id,
       userId: comment.user_id,
       parentId: comment.parent_id,
-      author: `익명${index + 1}`,
+      author: getAuthorName(comment),
       content: comment.description,
       likeCount: comment.like_count,
       isLiked: comment.is_liked,
@@ -38,6 +59,7 @@ const mapCommentsToTree = (comments = []) => {
       commentMap.get(comment.parentId)?.replies.push(comment);
       return;
     }
+
     rootComments.push(comment);
   });
 
@@ -70,7 +92,7 @@ const Detail = () => {
       }
     : null;
 
-  const comments = mapCommentsToTree(data?.comments);
+  const comments = mapCommentsToTree(data?.comments, data?.user_id);
   const postType = data?.type;
 
   const { mutate: deletePost } = useMutation({
