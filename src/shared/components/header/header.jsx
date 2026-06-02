@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Logo, More, Notifications } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
+import { useState, useEffect } from 'react';
 
 const Header = ({
   title,
@@ -9,15 +10,33 @@ const Header = ({
   onBackClick,
   onNotificationClick,
   onRightClick,
+  disabled,
 }) => {
   const navigate = useNavigate();
+  const [hasNotification, setHasNotification] = useState(false);
+
+  useEffect(() => {
+    const checkNotifications = () => {
+      const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+      setHasNotification(notifications.some((n) => !n.isRead));
+    };
+
+    checkNotifications();
+
+    window.addEventListener('storage', checkNotifications);
+    window.addEventListener('notification-updated', checkNotifications);
+
+    return () => {
+      window.removeEventListener('storage', checkNotifications);
+      window.removeEventListener('notification-updated', checkNotifications);
+    };
+  }, []);
 
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick();
       return;
     }
-
     navigate(-1);
   };
 
@@ -27,11 +46,27 @@ const Header = ({
       return;
     }
 
+    const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+    const updated = notifications.map((n) => ({ ...n, isRead: true }));
+    localStorage.setItem('notifications', JSON.stringify(updated));
+    setHasNotification(false);
+
     navigate(ROUTES.NOTIFICATION);
   };
 
   const renderLeft = () => {
-    if (variant === 'logo') return <Logo width={56} />;
+    if (variant === 'logo') {
+      return (
+        <button
+          type="button"
+          aria-label="홈으로 이동"
+          onClick={() => navigate(ROUTES.HOME)}
+          className="cursor-pointer"
+        >
+          <Logo width={56} />
+        </button>
+      );
+    }
 
     if (variant === 'back' || variant === 'write' || variant === 'detail') {
       return (
@@ -56,9 +91,12 @@ const Header = ({
           type="button"
           aria-label="알림"
           onClick={handleNotificationClick}
-          className="cursor-pointer"
+          className="relative cursor-pointer"
         >
           <Notifications width={30} />
+          {hasNotification && (
+            <span className="absolute right-0 top-0 h-[0.8rem] w-[0.8rem] rounded-full bg-red-500" />
+          )}
         </button>
       );
     }
@@ -67,8 +105,9 @@ const Header = ({
       return (
         <button
           type="button"
-          className="body_16_m text-gray-600"
+          className="body_16_m cursor-pointer text-gray-black disabled:cursor-default disabled:text-gray-600"
           onClick={onRightClick}
+          disabled={disabled}
         >
           {rightText}
         </button>

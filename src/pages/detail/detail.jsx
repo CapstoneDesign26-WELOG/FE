@@ -6,7 +6,7 @@ import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
 import { formatTime } from '@/shared/utils/format-time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { postQueries } from '@/shared/apis/post/post-queries';
+import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
 import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
@@ -15,18 +15,18 @@ import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 import { userQueries } from '@/shared/apis/user/user-queries';
 
 const mapCommentsToTree = (comments = []) => {
-  // TODO: 작성자 기준 익명 번호 부여할지 확인
   const commentMap = new Map();
 
   comments.forEach((comment, index) => {
-    commentMap.set(comment.ID, {
-      id: comment.ID,
-      userId: comment.UserID,
-      parentId: comment.ParentID,
+    commentMap.set(comment.id, {
+      id: comment.id,
+      userId: comment.user_id,
+      parentId: comment.parent_id,
       author: `익명${index + 1}`,
-      content: comment.Description,
-      likeCount: comment.LikeCount,
-      createdAt: formatTime(comment.CreatedAt),
+      content: comment.description,
+      likeCount: comment.like_count,
+      isLiked: comment.is_liked,
+      createdAt: formatTime(comment.created_at),
       replies: [],
     });
   });
@@ -38,7 +38,6 @@ const mapCommentsToTree = (comments = []) => {
       commentMap.get(comment.parentId)?.replies.push(comment);
       return;
     }
-
     rootComments.push(comment);
   });
 
@@ -46,13 +45,11 @@ const mapCommentsToTree = (comments = []) => {
 };
 
 const Detail = () => {
-  // TODO: 실시간 알림 테스트
-  useNotificationStream();
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { postId } = useParams();
+  useNotificationStream(postId);
 
   const [commentValue, setCommentValue] = useState('');
   const [isOptionOpen, setIsOptionOpen] = useState(false);
@@ -61,11 +58,28 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const post = data
+    ? {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        createdAt: formatTime(data.created_at),
+      }
+    : null;
+
+  const comments = mapCommentsToTree(data?.comments);
+  const postType = data?.type;
+
   const { mutate: deletePost } = useMutation({
     ...postMutations.delete,
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsDeleteModalOpen(false);
-      navigate(ROUTES.HOME);
+
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_LIST, postType],
+      });
+
+      navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
     },
   });
 
@@ -108,17 +122,6 @@ const Detail = () => {
   const handleDeletePost = () => {
     deletePost(postId);
   };
-
-  const post = data?.post
-    ? {
-        id: data.post.ID,
-        title: data.post.Title,
-        description: data.post.Description,
-        createdAt: formatTime(data.post.CreatedAt),
-      }
-    : null;
-
-  const comments = mapCommentsToTree(data?.comments);
 
   const handleCommentSubmit = () => {
     const trimmedValue = commentValue.trim();
@@ -174,7 +177,7 @@ const Detail = () => {
 
       <CommentList
         comments={comments}
-        myUserId={myInfo?.ID}
+        myUserId={myInfo?.id}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
         onUnlikeClick={handleCommentUnlike}
