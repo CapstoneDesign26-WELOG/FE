@@ -19,6 +19,7 @@ export const END_POINT = {
   POST_NEW_COMMENT: (postId) => `/api/posts/${postId}/comments`,
   DELETE_COMMENT: (commentId) => `/api/comments/${commentId}`,
   POST_COMMENT_LIKE: (commentId) => `/api/comments/${commentId}/like`,
+  DELETE_COMMENT_LIKE: (commentId) => `/api/comments/${commentId}/unlike`,
 
   // 실시간 알림
   GET_NOTIFICATION: '/api/notifications/stream',

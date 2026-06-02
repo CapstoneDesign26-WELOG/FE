@@ -96,7 +96,15 @@ const Detail = () => {
     },
   });
 
-  // TODO: 삭제 로직 테스트
+  const { mutate: unlikeComment } = useMutation({
+    ...commentMutations.unlike,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
+    },
+  });
+
   const handleDeletePost = () => {
     deletePost(postId);
   };
@@ -147,6 +155,10 @@ const Detail = () => {
     likeComment(commentId);
   };
 
+  const handleCommentUnlike = (commentId) => {
+    unlikeComment(commentId);
+  };
+
   const handleCommentDelete = (commentId) => {
     removeComment(commentId);
   };
@@ -165,6 +177,7 @@ const Detail = () => {
         myUserId={myInfo?.ID}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
+        onUnlikeClick={handleCommentUnlike}
         onDeleteClick={handleCommentDelete}
         disabled={isPending}
       />
