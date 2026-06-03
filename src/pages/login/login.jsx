@@ -15,6 +15,15 @@ const Login = () => {
 
       if (response?.access_token) {
         localStorage.setItem('token', response.access_token);
+
+        const userId = response.user?.id;
+        const toastKey = `ai-comment-guide-toast-${userId}`;
+
+        if (userId && !localStorage.getItem(toastKey)) {
+          localStorage.setItem('showAiCommentGuideToast', 'true');
+          localStorage.setItem(toastKey, 'true');
+        }
+
         navigate(ROUTES.HOME);
       }
     } catch (error) {
