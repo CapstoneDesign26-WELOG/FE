@@ -23,7 +23,7 @@ const MyPosts = () => {
                   {post.Title}
                 </p>
                 <p className="cap_12_m mt-[0.4rem] text-gray-500">
-                  댓글 {post.Comments?.length ?? 0}개 ·{' '}
+                  댓글 {post.comment_count ?? 0}개 ·{' '}
                   {formatTime(post.CreatedAt)}
                 </p>
               </Link>
