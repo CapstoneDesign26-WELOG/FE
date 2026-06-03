@@ -14,6 +14,9 @@ export const deleteComment = (commentId) =>
 export const postCommentLike = (commentId) =>
   post(END_POINT.POST_COMMENT_LIKE(commentId));
 
+export const deleteCommentLike = (commentId) =>
+  del(END_POINT.DELETE_COMMENT_LIKE(commentId));
+
 export const commentMutations = {
   create: mutationOptions({
     mutationFn: postNewComment,
@@ -25,5 +28,9 @@ export const commentMutations = {
 
   like: mutationOptions({
     mutationFn: postCommentLike,
+  }),
+
+  unlike: mutationOptions({
+    mutationFn: deleteCommentLike,
   }),
 };

@@ -17,7 +17,7 @@ const Layout = () => {
   const isDetailPage = matchPath(ROUTES.DETAIL(), pathname);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
       <main className="relative flex-1 flex flex-col">
         <Outlet />
       </main>

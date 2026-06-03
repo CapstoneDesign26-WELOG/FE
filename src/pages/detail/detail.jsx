@@ -6,7 +6,7 @@ import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
 import { formatTime } from '@/shared/utils/format-time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { postQueries } from '@/shared/apis/post/post-queries';
+import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
 import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
@@ -14,19 +14,40 @@ import { QUERY_KEY } from '@/shared/constants/query-key';
 import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 import { userQueries } from '@/shared/apis/user/user-queries';
 
-const mapCommentsToTree = (comments = []) => {
-  // TODO: 작성자 기준 익명 번호 부여할지 확인
+const mapCommentsToTree = (comments = [], postUserId) => {
   const commentMap = new Map();
+  const anonymousMap = new Map();
+  let anonymousCount = 1;
 
-  comments.forEach((comment, index) => {
-    commentMap.set(comment.ID, {
-      id: comment.ID,
-      userId: comment.UserID,
-      parentId: comment.ParentID,
-      author: `익명${index + 1}`,
-      content: comment.Description,
-      likeCount: comment.LikeCount,
-      createdAt: formatTime(comment.CreatedAt),
+  const getAuthorName = (comment) => {
+    if (comment.user_id === postUserId) {
+      return '글쓴이';
+    }
+
+    if (comment.is_ai) {
+      const authorName = `익명${anonymousCount}`;
+      anonymousCount += 1;
+      return authorName;
+    }
+
+    if (!anonymousMap.has(comment.user_id)) {
+      anonymousMap.set(comment.user_id, `익명${anonymousCount}`);
+      anonymousCount += 1;
+    }
+
+    return anonymousMap.get(comment.user_id);
+  };
+
+  comments.forEach((comment) => {
+    commentMap.set(comment.id, {
+      id: comment.id,
+      userId: comment.user_id,
+      parentId: comment.parent_id,
+      author: getAuthorName(comment),
+      content: comment.description,
+      likeCount: comment.like_count,
+      isLiked: comment.is_liked,
+      createdAt: formatTime(comment.created_at),
       replies: [],
     });
   });
@@ -46,13 +67,11 @@ const mapCommentsToTree = (comments = []) => {
 };
 
 const Detail = () => {
-  // TODO: 실시간 알림 테스트
-  useNotificationStream();
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { postId } = useParams();
+  useNotificationStream(postId);
 
   const [commentValue, setCommentValue] = useState('');
   const [isOptionOpen, setIsOptionOpen] = useState(false);
@@ -61,11 +80,31 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const myUserId = myInfo?.user_id;
+  const isMyPost = data?.user_id === myUserId;
+
+  const post = data
+    ? {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        createdAt: formatTime(data.created_at),
+      }
+    : null;
+
+  const comments = mapCommentsToTree(data?.comments, data?.user_id);
+  const postType = data?.type;
+
   const { mutate: deletePost } = useMutation({
     ...postMutations.delete,
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsDeleteModalOpen(false);
-      navigate(ROUTES.HOME);
+
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_LIST, postType],
+      });
+
+      navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
     },
   });
 
@@ -96,21 +135,18 @@ const Detail = () => {
     },
   });
 
-  // TODO: 삭제 로직 테스트
+  const { mutate: unlikeComment } = useMutation({
+    ...commentMutations.unlike,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
+    },
+  });
+
   const handleDeletePost = () => {
     deletePost(postId);
   };
-
-  const post = data?.post
-    ? {
-        id: data.post.ID,
-        title: data.post.Title,
-        description: data.post.Description,
-        createdAt: formatTime(data.post.CreatedAt),
-      }
-    : null;
-
-  const comments = mapCommentsToTree(data?.comments);
 
   const handleCommentSubmit = () => {
     const trimmedValue = commentValue.trim();
@@ -147,6 +183,10 @@ const Detail = () => {
     likeComment(commentId);
   };
 
+  const handleCommentUnlike = (commentId) => {
+    unlikeComment(commentId);
+  };
+
   const handleCommentDelete = (commentId) => {
     removeComment(commentId);
   };
@@ -156,15 +196,19 @@ const Detail = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Header variant="detail" onRightClick={() => setIsOptionOpen(true)} />
+      <Header
+        variant="detail"
+        onRightClick={isMyPost ? () => setIsOptionOpen(true) : undefined}
+      />
 
       <PostDetail post={post} />
 
       <CommentList
         comments={comments}
-        myUserId={myInfo?.ID}
+        myUserId={myInfo?.user_id}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
+        onUnlikeClick={handleCommentUnlike}
         onDeleteClick={handleCommentDelete}
         disabled={isPending}
       />
@@ -176,7 +220,7 @@ const Detail = () => {
         disabled={isPending}
       />
 
-      {isOptionOpen && (
+      {isMyPost && isOptionOpen && (
         <div
           className="absolute inset-0 z-40"
           onClick={() => setIsOptionOpen(false)}
