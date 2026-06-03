@@ -26,7 +26,10 @@ const Notification = () => {
             <li
               key={item.id}
               className="flex cursor-pointer gap-[0.8rem] border-b border-gray-300 p-[1.6rem]"
-              onClick={() => navigate(ROUTES.DETAIL(item.postId))}
+              onClick={() => {
+                if (!item.postId) return;
+                navigate(ROUTES.DETAIL(item.postId));
+              }}
             >
               <div className="flex justify-center items-center w-[1.6rem] h-[1.6rem] bg-gray-300 rounded-full">
                 <Reply width={9.6} />
