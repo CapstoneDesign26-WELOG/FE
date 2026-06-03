@@ -15,6 +15,7 @@ const Login = () => {
 
       if (response?.access_token) {
         localStorage.setItem('token', response.access_token);
+        localStorage.setItem('role', response.user?.role);
 
         const userId = response.user?.id;
         const toastKey = `ai-comment-guide-toast-${userId}`;
