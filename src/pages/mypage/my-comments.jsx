@@ -8,7 +8,9 @@ import { formatTime } from '@/shared/utils/format-time';
 const MyComments = () => {
   const { data: myInfo } = useQuery(myQueries.info());
 
-  const comments = myInfo?.comments ?? [];
+  const comments = (myInfo?.comments ?? []).filter(
+    (comment) => comment.post_id && comment.post_title,
+  );
 
   return (
     <div className="flex flex-1 flex-col bg-white">
@@ -16,7 +18,6 @@ const MyComments = () => {
 
       <main className="flex flex-1 flex-col px-[1.6rem] pt-[0.2rem] pb-[1.6rem]">
         <ul className="flex flex-col">
-          {/* TODO: postId 내려주면 라우트 연결  */}
           {comments.map((comment) => (
             <li key={comment.id} className="border-b border-gray-300">
               <Link
