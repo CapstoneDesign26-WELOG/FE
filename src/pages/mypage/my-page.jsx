@@ -3,18 +3,37 @@ import Header from '@/shared/components/header/header';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { Book, Logout, Profile, Reply } from '@/shared/assets/svgs';
 import { useState } from 'react';
-import { AI_COMMENT_TYPES, DEFAULT_AI_COMMENT_TYPE } from './constants/my-page';
 import { myQueries } from '@/shared/apis/my/my-queries';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { userMutations } from '@/shared/apis/user/user-mutations';
+import { AI_COMMENT_TYPES, DEFAULT_AI_COMMENT_TYPE } from './constants/my-page';
 
 const MyPage = () => {
-  const navigate = useNavigate();
-
   const { data: myInfo } = useQuery(myQueries.info());
 
-  const user = myInfo?.user;
-  const posts = myInfo?.posts ?? [];
-  const comments = myInfo?.comments ?? [];
+  if (!myInfo) return null;
+
+  return <MyPageContent myInfo={myInfo} />;
+};
+
+const MyPageContent = ({ myInfo }) => {
+  const navigate = useNavigate();
+
+  const user = myInfo.user;
+  const posts = myInfo.posts ?? [];
+  const comments = myInfo.comments ?? [];
+
+  const initialAiType = user?.AIPreference ?? DEFAULT_AI_COMMENT_TYPE;
+
+  const [selectedAiType, setSelectedAiType] = useState(initialAiType);
+  const [savedAiType, setSavedAiType] = useState(initialAiType);
+
+  const { mutate: updateAiPreference, isPending } = useMutation({
+    ...userMutations.preference,
+    onSuccess: () => {
+      setSavedAiType(selectedAiType);
+    },
+  });
 
   const postCount = posts.length;
 
@@ -23,16 +42,14 @@ const MyPage = () => {
     0,
   );
 
-  const [selectedAiType, setSelectedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
-  const [savedAiType, setSavedAiType] = useState(DEFAULT_AI_COMMENT_TYPE);
-
   const isAiTypeChanged = selectedAiType !== savedAiType;
 
   const handleAiTypeEdit = () => {
-    if (!isAiTypeChanged) return;
+    if (!isAiTypeChanged || isPending) return;
 
-    // TODO: AI 댓글 선호 유형 수정 API 연결
-    setSavedAiType(selectedAiType);
+    updateAiPreference({
+      aiPreference: selectedAiType,
+    });
   };
 
   const handleLogout = () => {
@@ -84,7 +101,7 @@ const MyPage = () => {
             <button
               type="button"
               onClick={handleAiTypeEdit}
-              disabled={!isAiTypeChanged}
+              disabled={!isAiTypeChanged || isPending}
               className="py-[0.4rem] px-[0.8rem] rounded-[8px] cap_14_m disabled:text-gray-100 disabled:bg-gray-500 disabled:cursor-not-allowed text-gray-white bg-main-1000 cursor-pointer"
             >
               수정

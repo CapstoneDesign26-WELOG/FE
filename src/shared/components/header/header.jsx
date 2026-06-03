@@ -17,7 +17,9 @@ const Header = ({
 
   useEffect(() => {
     const checkNotifications = () => {
-      const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+      const notifications = JSON.parse(
+        localStorage.getItem('notifications') ?? '[]',
+      );
       setHasNotification(notifications.some((n) => !n.isRead));
     };
 
@@ -46,7 +48,9 @@ const Header = ({
       return;
     }
 
-    const notifications = JSON.parse(localStorage.getItem('notifications') ?? '[]');
+    const notifications = JSON.parse(
+      localStorage.getItem('notifications') ?? '[]',
+    );
     const updated = notifications.map((n) => ({ ...n, isRead: true }));
     localStorage.setItem('notifications', JSON.stringify(updated));
     setHasNotification(false);
@@ -114,7 +118,7 @@ const Header = ({
       );
     }
 
-    if (variant === 'detail') {
+    if (variant === 'detail' && onRightClick) {
       return (
         <button
           type="button"

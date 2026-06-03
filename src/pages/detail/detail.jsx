@@ -14,15 +14,36 @@ import { QUERY_KEY } from '@/shared/constants/query-key';
 import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 import { userQueries } from '@/shared/apis/user/user-queries';
 
-const mapCommentsToTree = (comments = []) => {
+const mapCommentsToTree = (comments = [], postUserId) => {
   const commentMap = new Map();
+  const anonymousMap = new Map();
+  let anonymousCount = 1;
 
-  comments.forEach((comment, index) => {
+  const getAuthorName = (comment) => {
+    if (comment.user_id === postUserId) {
+      return '글쓴이';
+    }
+
+    if (comment.is_ai) {
+      const authorName = `익명${anonymousCount}`;
+      anonymousCount += 1;
+      return authorName;
+    }
+
+    if (!anonymousMap.has(comment.user_id)) {
+      anonymousMap.set(comment.user_id, `익명${anonymousCount}`);
+      anonymousCount += 1;
+    }
+
+    return anonymousMap.get(comment.user_id);
+  };
+
+  comments.forEach((comment) => {
     commentMap.set(comment.id, {
       id: comment.id,
       userId: comment.user_id,
       parentId: comment.parent_id,
-      author: `익명${index + 1}`,
+      author: getAuthorName(comment),
       content: comment.description,
       likeCount: comment.like_count,
       isLiked: comment.is_liked,
@@ -38,6 +59,7 @@ const mapCommentsToTree = (comments = []) => {
       commentMap.get(comment.parentId)?.replies.push(comment);
       return;
     }
+
     rootComments.push(comment);
   });
 
@@ -58,6 +80,9 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const myUserId = myInfo?.user_id;
+  const isMyPost = data?.user_id === myUserId;
+
   const post = data
     ? {
         id: data.id,
@@ -67,7 +92,7 @@ const Detail = () => {
       }
     : null;
 
-  const comments = mapCommentsToTree(data?.comments);
+  const comments = mapCommentsToTree(data?.comments, data?.user_id);
   const postType = data?.type;
 
   const { mutate: deletePost } = useMutation({
@@ -103,6 +128,15 @@ const Detail = () => {
 
   const { mutate: removeComment } = useMutation({
     ...commentMutations.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_DETAIL, postId],
+      });
+    },
+  });
+
+  const { mutate: unlikeComment } = useMutation({
+    ...commentMutations.unlike,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.POST_DETAIL, postId],
@@ -149,6 +183,10 @@ const Detail = () => {
     likeComment(commentId);
   };
 
+  const handleCommentUnlike = (commentId) => {
+    unlikeComment(commentId);
+  };
+
   const handleCommentDelete = (commentId) => {
     removeComment(commentId);
   };
@@ -158,15 +196,19 @@ const Detail = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Header variant="detail" onRightClick={() => setIsOptionOpen(true)} />
+      <Header
+        variant="detail"
+        onRightClick={isMyPost ? () => setIsOptionOpen(true) : undefined}
+      />
 
       <PostDetail post={post} />
 
       <CommentList
         comments={comments}
-        myUserId={myInfo?.id}
+        myUserId={myInfo?.user_id}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
+        onUnlikeClick={handleCommentUnlike}
         onDeleteClick={handleCommentDelete}
         disabled={isPending}
       />
@@ -178,7 +220,7 @@ const Detail = () => {
         disabled={isPending}
       />
 
-      {isOptionOpen && (
+      {isMyPost && isOptionOpen && (
         <div
           className="absolute inset-0 z-40"
           onClick={() => setIsOptionOpen(false)}
