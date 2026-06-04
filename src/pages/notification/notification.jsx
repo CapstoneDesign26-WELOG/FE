@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/shared/components/header/header';
 import { Reply } from '@/shared/assets/svgs';
+import { ROUTES } from '@/shared/routes/routes-config';
 
 const Notification = () => {
   const navigate = useNavigate();
@@ -24,7 +25,11 @@ const Notification = () => {
           {notifications.map((item) => (
             <li
               key={item.id}
-              className="flex gap-[0.8rem] border-b border-gray-300 p-[1.6rem]"
+              className="flex cursor-pointer gap-[0.8rem] border-b border-gray-300 p-[1.6rem]"
+              onClick={() => {
+                if (!item.postId) return;
+                navigate(ROUTES.DETAIL(item.postId));
+              }}
             >
               <div className="flex justify-center items-center w-[1.6rem] h-[1.6rem] bg-gray-300 rounded-full">
                 <Reply width={9.6} />

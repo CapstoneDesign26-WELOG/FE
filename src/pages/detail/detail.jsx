@@ -80,8 +80,12 @@ const Detail = () => {
   const { data, isLoading } = useQuery(postQueries.detail(postId));
   const { data: myInfo } = useQuery(userQueries.status());
 
+  const role = localStorage.getItem('role');
+  const isAdmin = role === 'ADMIN';
+
   const myUserId = myInfo?.user_id;
   const isMyPost = data?.user_id === myUserId;
+  const canDeletePost = isMyPost || isAdmin;
 
   const post = data
     ? {
@@ -198,7 +202,7 @@ const Detail = () => {
     <div className="relative flex min-h-screen flex-col">
       <Header
         variant="detail"
-        onRightClick={isMyPost ? () => setIsOptionOpen(true) : undefined}
+        onRightClick={canDeletePost ? () => setIsOptionOpen(true) : undefined}
       />
 
       <PostDetail post={post} />
@@ -206,6 +210,7 @@ const Detail = () => {
       <CommentList
         comments={comments}
         myUserId={myInfo?.user_id}
+        isAdmin={isAdmin}
         onReplySubmit={handleReplySubmit}
         onLikeClick={handleCommentLike}
         onUnlikeClick={handleCommentUnlike}
@@ -220,7 +225,7 @@ const Detail = () => {
         disabled={isPending}
       />
 
-      {isMyPost && isOptionOpen && (
+      {canDeletePost && isOptionOpen && (
         <div
           className="absolute inset-0 z-40"
           onClick={() => setIsOptionOpen(false)}

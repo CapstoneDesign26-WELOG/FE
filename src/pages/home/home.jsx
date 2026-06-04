@@ -5,6 +5,8 @@ import PostList from './components/post-list';
 import { useQuery } from '@tanstack/react-query';
 import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
 import { formatTime } from '@/shared/utils/format-time';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const { data: posts = [] } = useQuery(
@@ -19,6 +21,16 @@ const Home = () => {
     commentCount: post.comment_count,
     createdAt: formatTime(post.CreatedAt),
   }));
+
+  useEffect(() => {
+    const shouldShowToast = localStorage.getItem('showAiCommentGuideToast');
+
+    if (!shouldShowToast) return;
+
+    toast('마이페이지에서 선호하는 댓글 유형을 선택해보세요.');
+
+    localStorage.removeItem('showAiCommentGuideToast');
+  }, []);
 
   return (
     <div className="relative flex flex-col flex-1">

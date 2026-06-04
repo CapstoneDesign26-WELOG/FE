@@ -3,6 +3,7 @@ import CommentItem from './comment-item';
 const CommentList = ({
   comments,
   myUserId,
+  isAdmin,
   onReplySubmit,
   onLikeClick,
   onUnlikeClick,
@@ -16,6 +17,7 @@ const CommentList = ({
           key={comment.id}
           comment={comment}
           myUserId={myUserId}
+          isAdmin={isAdmin}
           onReplySubmit={onReplySubmit}
           onLikeClick={onLikeClick}
           onUnlikeClick={onUnlikeClick}

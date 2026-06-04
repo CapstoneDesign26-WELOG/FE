@@ -5,6 +5,7 @@ import InputBar from '@/shared/components/input-bar/input-bar';
 const CommentItem = ({
   comment,
   myUserId,
+  isAdmin,
   isReply = false,
   onReplySubmit,
   onLikeClick,
@@ -18,6 +19,7 @@ const CommentItem = ({
   const [replyValue, setReplyValue] = useState('');
 
   const isMyComment = comment.userId === myUserId;
+  const canDeleteComment = isMyComment || isAdmin;
 
   const handleLikeClick = () => {
     if (isLiked) {
@@ -81,7 +83,7 @@ const CommentItem = ({
           </button>
         )}
 
-        {isMyComment && (
+        {canDeleteComment && (
           <button
             type="button"
             aria-label="댓글 삭제"
@@ -113,6 +115,7 @@ const CommentItem = ({
               comment={reply}
               isReply
               myUserId={myUserId}
+              isAdmin={isAdmin}
               onReplySubmit={onReplySubmit}
               onLikeClick={onLikeClick}
               onUnlikeClick={onUnlikeClick}
