@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export const useNotificationStream = (postId) => {
+export const useNotificationStream = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -42,15 +42,21 @@ export const useNotificationStream = (postId) => {
         const existing = JSON.parse(localStorage.getItem('notifications') ?? '[]');
         const updated = [newNotification, ...existing].slice(0, 15);
         localStorage.setItem('notifications', JSON.stringify(updated));
-
         window.dispatchEvent(new Event('notification-updated'));
       } catch (e) {
         console.log('알림 파싱 에러:', e);
       }
 
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.POST_DETAIL, postId],
-      });
+      const currentPath = window.location.pathname;
+      const postIdFromUrl = currentPath.startsWith('/detail/')
+        ? Number(currentPath.split('/detail/')[1])
+        : null;
+
+      if (postIdFromUrl) {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY.POST_DETAIL, postIdFromUrl],
+        });
+      }
 
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.POST_LIST],
@@ -64,5 +70,5 @@ export const useNotificationStream = (postId) => {
     return () => {
       eventSource.close();
     };
-  }, [queryClient, postId]);
+  }, [queryClient]);
 };
