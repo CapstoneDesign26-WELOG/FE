@@ -11,7 +11,6 @@ import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
 import { QUERY_KEY } from '@/shared/constants/query-key';
-import { useNotificationStream } from '@/shared/hooks/use-notification-stream';
 import { userQueries } from '@/shared/apis/user/user-queries';
 
 const mapCommentsToTree = (comments = [], postUserId) => {
@@ -71,7 +70,6 @@ const Detail = () => {
   const queryClient = useQueryClient();
 
   const { postId } = useParams();
-  useNotificationStream(postId);
 
   const [commentValue, setCommentValue] = useState('');
   const [isOptionOpen, setIsOptionOpen] = useState(false);
