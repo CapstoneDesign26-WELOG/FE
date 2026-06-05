@@ -13,7 +13,7 @@ const FloatingButton = ({ type }) => {
     <button
       type="button"
       aria-label="글 작성하기"
-      className="flex justify-center items-center w-[4.8rem] h-[4.8rem] bg-main-900 rounded-full cursor-pointer"
+      className="fixed right-[max(1.6rem,calc((100vw-var(--max-width))/2+1.6rem))] bottom-[8.8rem] z-50 flex h-[4.8rem] w-[4.8rem] cursor-pointer items-center justify-center rounded-full bg-main-900"
       onClick={handleClickCreate}
     >
       <Plus width={18} height={18} />
