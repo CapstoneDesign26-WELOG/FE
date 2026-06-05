@@ -33,7 +33,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col flex-1">
+    <div className=" flex flex-col flex-1">
       <Header variant="logo" />
 
       {mappedPosts.length === 0 ? (
@@ -42,9 +42,9 @@ const Home = () => {
         <PostList posts={mappedPosts} />
       )}
 
-      <div className="absolute right-[1.6rem] bottom-[3rem]">
+      {/* <div className="fixed right-[1.6rem] bottom-[8.8rem]"> */}
         <FloatingButton type={POST_TYPE.PRIVATE} />
-      </div>
+      {/* </div> */}
     </div>
   );
 };
