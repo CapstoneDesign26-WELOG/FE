@@ -35,5 +35,8 @@ export const postQueries = {
       queryKey: [QUERY_KEY.POST_DETAIL, postId],
       queryFn: () => getPostDetail(postId),
       enabled: Boolean(postId),
+
+      // 10초마다 게시글 상세 재요청
+      refetchInterval: 10 * 1000,
     }),
 };
