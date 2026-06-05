@@ -35,7 +35,8 @@ instance.interceptors.response.use(
 
   (error) => {
     if (error.response) {
-      const { status, message } = error.response.data;
+      const status = error.response.status;
+      const message = error.response.data?.message;
 
       if (status === 401) {
         if (!isRedirecting) {
