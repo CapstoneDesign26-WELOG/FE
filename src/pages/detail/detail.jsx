@@ -102,11 +102,11 @@ const Detail = () => {
     onSuccess: async () => {
       setIsDeleteModalOpen(false);
 
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.POST_LIST, postType],
-      });
-
       navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
+      
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.POST_LIST],
+      });
     },
   });
 
