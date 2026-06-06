@@ -29,7 +29,6 @@ export const useNotificationStream = () => {
         const data = JSON.parse(event.data);
 
         if (data.type === 'CONNECTED') return;
-        if (data.type !== 'AI_COMMENT_ADDED') return;
 
         const newNotification = {
           id: Date.now(),
@@ -50,7 +49,7 @@ export const useNotificationStream = () => {
 
       const currentPath = window.location.pathname;
       const postIdFromUrl = currentPath.startsWith('/detail/')
-        ? currentPath.split('/detail/')[1]
+        ? Number(currentPath.split('/detail/')[1])
         : null;
 
       if (postIdFromUrl) {
