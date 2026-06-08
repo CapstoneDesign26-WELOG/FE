@@ -49,7 +49,7 @@ instance.interceptors.response.use(
 
           setTimeout(() => {
             window.location.replace(ROUTES.LOGIN);
-          }, 1000);
+          }, 2000);
         }
 
         return Promise.reject(error);
