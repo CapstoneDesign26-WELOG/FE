@@ -49,8 +49,14 @@ instance.interceptors.response.use(
 
           setTimeout(() => {
             window.location.replace(ROUTES.LOGIN);
-          }, 1000);
+          }, 2000);
         }
+
+        return Promise.reject(error);
+      }
+
+      if (status === 422) {
+        toast.error('비속어가 포함된 글은 작성할 수 없습니다');
 
         return Promise.reject(error);
       }
