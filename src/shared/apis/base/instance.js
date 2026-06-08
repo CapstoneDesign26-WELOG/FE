@@ -55,6 +55,12 @@ instance.interceptors.response.use(
         return Promise.reject(error);
       }
 
+      if (status === 422) {
+        toast.error('비속어가 포함된 글은 작성할 수 없습니다');
+
+        return Promise.reject(error);
+      }
+
       const displayMessage =
         RESPONSE_MESSAGE[status] || message || '알 수 없는 오류입니다.';
 
