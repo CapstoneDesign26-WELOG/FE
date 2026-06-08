@@ -28,6 +28,7 @@ export const useNotificationStream = () => {
       try {
         const data = JSON.parse(event.data);
 
+        if (data.type === 'AI_COMMENT_COMPLETE') return;
         if (data.type === 'CONNECTED') return;
         if (data.type !== 'AI_COMMENT_ADDED') return;
 
