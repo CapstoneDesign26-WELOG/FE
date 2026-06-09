@@ -54,6 +54,7 @@ const MyPageContent = ({ myInfo }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('notifications');
     navigate(ROUTES.LOGIN);
   };
 
