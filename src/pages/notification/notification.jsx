@@ -4,13 +4,23 @@ import Header from '@/shared/components/header/header';
 import { Reply } from '@/shared/assets/svgs';
 import { ROUTES } from '@/shared/routes/routes-config';
 
+const getStoredNotifications = () =>
+  JSON.parse(localStorage.getItem('notifications') ?? '[]');
+
 const Notification = () => {
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(getStoredNotifications);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('notifications') ?? '[]');
-    setNotifications(stored);
+    const handleUpdate = () => {
+      setNotifications(getStoredNotifications());
+    };
+
+    window.addEventListener('notification-updated', handleUpdate);
+
+    return () => {
+      window.removeEventListener('notification-updated', handleUpdate);
+    };
   }, []);
 
   return (
