@@ -6,12 +6,13 @@ import PostDetail from './components/post-detail';
 import InputBar from '@/shared/components/input-bar/input-bar';
 import { formatTime } from '@/shared/utils/format-time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { POST_TYPE, postQueries } from '@/shared/apis/post/post-queries';
+import { postQueries } from '@/shared/apis/post/post-queries';
 import { postMutations } from '@/shared/apis/post/post-mutations';
 import { ROUTES } from '@/shared/routes/routes-config';
 import { commentMutations } from '@/shared/apis/comment/comment-mutations';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { userQueries } from '@/shared/apis/user/user-queries';
+import { POST_TYPE_ID } from './constants/detail';
 
 const mapCommentsToTree = (comments = [], postUserId) => {
   const commentMap = new Map();
@@ -65,6 +66,19 @@ const mapCommentsToTree = (comments = [], postUserId) => {
   return rootComments;
 };
 
+const removeNotificationsByPostId = (postId) => {
+  const notifications = JSON.parse(
+    localStorage.getItem('notifications') ?? '[]',
+  );
+
+  const updated = notifications.filter(
+    (notification) => Number(notification.postId) !== Number(postId),
+  );
+
+  localStorage.setItem('notifications', JSON.stringify(updated));
+  window.dispatchEvent(new Event('notification-updated'));
+};
+
 const Detail = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -95,18 +109,22 @@ const Detail = () => {
     : null;
 
   const comments = mapCommentsToTree(data?.comments, data?.user_id);
+
   const postType = data?.type;
+  const isPrivatePost = Number(postType) === POST_TYPE_ID.PRIVATE;
 
   const { mutate: deletePost } = useMutation({
     ...postMutations.delete,
     onSuccess: async () => {
       setIsDeleteModalOpen(false);
 
-      navigate(postType === POST_TYPE.PRIVATE ? ROUTES.HOME : ROUTES.PUBLIC);
-      
+      removeNotificationsByPostId(postId);
+
       await queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.POST_LIST],
       });
+
+      navigate(isPrivatePost ? ROUTES.HOME : ROUTES.PUBLIC);
     },
   });
 
