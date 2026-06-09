@@ -66,6 +66,19 @@ const mapCommentsToTree = (comments = [], postUserId) => {
   return rootComments;
 };
 
+const removeNotificationsByPostId = (postId) => {
+  const notifications = JSON.parse(
+    localStorage.getItem('notifications') ?? '[]',
+  );
+
+  const updated = notifications.filter(
+    (notification) => Number(notification.postId) !== Number(postId),
+  );
+
+  localStorage.setItem('notifications', JSON.stringify(updated));
+  window.dispatchEvent(new Event('notification-updated'));
+};
+
 const Detail = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -104,6 +117,8 @@ const Detail = () => {
     ...postMutations.delete,
     onSuccess: async () => {
       setIsDeleteModalOpen(false);
+
+      removeNotificationsByPostId(postId);
 
       await queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.POST_LIST],
